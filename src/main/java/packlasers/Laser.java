@@ -11,6 +11,17 @@ public class Laser {
         this.direccion = direccion;
     }
 
+    public int getCoordX() {
+        return this.x;
+    }
+
+    public int getCoordY() {
+        return this.y;
+    }
+
+    public void mover() {
+        // TODO: Cambiar las coordenadas (x, y) en base a la dirección
+    }
 }
 
 enum Direction {
