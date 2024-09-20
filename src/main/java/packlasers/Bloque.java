@@ -8,7 +8,7 @@ public interface Bloque {
     boolean esMovible();
 }
 
-public class BloqueDeCristal implements Bloque {
+class BloqueDeCristal implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // TODO: Deja que el láser pase a través
@@ -20,7 +20,7 @@ public class BloqueDeCristal implements Bloque {
     }
 }
 
-public class BloqueDeVidrio implements Bloque {
+class BloqueDeVidrio implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // Difracta el láser en dos direcciones
@@ -32,7 +32,7 @@ public class BloqueDeVidrio implements Bloque {
     }
 }
 
-public class BloqueOpacoMovil implements Bloque {
+class BloqueOpacoMovil implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // TODO: Absorbe el láser, no hace nada
@@ -44,7 +44,7 @@ public class BloqueOpacoMovil implements Bloque {
     }
 }
 
-public class BloqueOpacoFijo implements Bloque {
+class BloqueOpacoFijo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // TODO: Absorbe el láser, no hace nada
@@ -56,7 +56,7 @@ public class BloqueOpacoFijo implements Bloque {
     }
 }
 
-public class BloqueEspejo implements Bloque {
+class BloqueEspejo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // TODO: Cambia la dirección del láser
