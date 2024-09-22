@@ -35,7 +35,22 @@ public class Tablero {
         }
     }
 
-    public void chequearVictoria() {
+    public boolean chequearVictoria() {
         //TODO: si todos los targets fueron alcanzados => WIN
+
+        // Itero sobre los objetivos
+        for (Target target : targets){
+            boolean alcanzado = false;
+            for (Laser laser : lasers){
+                if (target.fuiAlcanzado(laser)){
+                    alcanzado = true;
+                    break;
+                }
+            }
+            if (!alcanzado){
+                return false;
+            }
+        }
+        return true;
     }
 }

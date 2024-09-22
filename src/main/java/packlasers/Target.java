@@ -9,7 +9,7 @@ public class Target {
         this.y = y;
     }
 
-    public boolean fuiAlcanzado() {
-        return false; // TODO: hacer logica Devolver true si me toco un laser
+    public boolean fuiAlcanzado(Laser laser) {
+        return laser.getCoordX() == this.x && laser.getCoordY() == this.y;
     }
 }
