@@ -11,9 +11,9 @@ public interface Bloque {
 class BloqueDeCristal implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
-        // TODO: Deja que el láser pase a través
-        laser.moverAlExtremo();
-        laser.continuar();
+        // Refracta el laser, continuando en linea recta por el extremo opuesto
+        laser.refractarLaser();
+
     }
 
     @Override
@@ -25,12 +25,14 @@ class BloqueDeCristal implements Bloque {
 class BloqueDeVidrio implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
-        // Difracta el láser en dos direcciones
-        laser.continuar(); // El laser que continua
+        // Difracta el láser en dos direcciones:
 
-        Laser laserReflejado = laser.reflejarLaser(); // Reflejo el laser
+        // 1) Refleja el láser como un espejo
+        Laser laserReflejado = laser.reflejarLaser();
+        laserReflejado.mover();
 
-        laserReflejado.continuar(); // El laser reflejado continua
+        // 2) Deja que el láser principal siga en la misma dirección
+        laser.mover();
     }
 
     @Override
@@ -42,7 +44,7 @@ class BloqueDeVidrio implements Bloque {
 class BloqueOpacoMovil implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
-        // TODO: Absorbe el láser, no hace nada
+        laser.fuiAbsorbido();
     }
 
     @Override
@@ -54,7 +56,7 @@ class BloqueOpacoMovil implements Bloque {
 class BloqueOpacoFijo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
-        // TODO: Absorbe el láser, no hace nada
+        laser.fuiAbsorbido();
     }
 
     @Override
@@ -66,10 +68,9 @@ class BloqueOpacoFijo implements Bloque {
 class BloqueEspejo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
-        // TODO: Cambia la dirección del láser
+        // Refleja el láser como un espejo
         Laser laserReflejado = laser.reflejarLaser();
-
-        laserReflejado.continuar();
+        laserReflejado.mover();
     }
 
     @Override

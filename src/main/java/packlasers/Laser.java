@@ -3,12 +3,14 @@ package packlasers;
 public class Laser {
     private int x;
     private int y;
-    private Direction direccion;
+    private Direccion direccion;
+    private boolean estoyActivo;
 
-    public Laser(int x, int y, Direction direccion) {
+    public Laser(int x, int y, Direccion direccion) {
         this.x = x;
         this.y = y;
         this.direccion = direccion;
+        this.estoyActivo = true;
     }
 
     public int getCoordX() {
@@ -19,76 +21,74 @@ public class Laser {
         return this.y;
     }
 
-    public Laser moverAlExtremo(){
-        // Mueve el laser al extremo opuesto del bloquee
-        switch (this.direccion){
-            case NE:
-                this.x += 2;
-                this.y -= 2;
-                break;
-            case NW:
-                this.x -= 2;
-                this.y -= 2;
-                break;
-            case SE:
-                this.x += 2;
-                this.y += 2;
-                break;
-            case SW:
-                this.x -= 2;
-                this.y += 2;
-                break;
-        }
-
-        return this;
+    public void fuiAbsorbido() {
+        this.estoyActivo = false;
     }
 
-    public void continuar() {
-        // Actualiza coordenadas en funcion de la direccion
-        switch (this.direccion) {
-            case NE: // Noreste
-                y--;
-                x++;
-                break;
-            case NW: // Noroeste
-                x--;
-                y--;
-                break;
-            case SE: // Sureste
-                x++;
-                y++;
-                break;
-            case SW: // Suroeste
-                x--;
-                y++;
-                break;
+    public void puedoContinuar() {
+        this.estoyActivo = true;
+    }
+
+    public boolean isActive() {
+        return this.estoyActivo;
+    }
+
+    public void mover(){
+        // Mueve el laser al extremo opuesto del bloquee
+        if(estoyActivo) {
+            switch (direccion) {
+                case NE:
+                    this.x += 2;
+                    this.y -= 2;
+                    break;
+                case NW:
+                    this.x -= 2;
+                    this.y -= 2;
+                    break;
+                case SE:
+                    this.x += 2;
+                    this.y += 2;
+                    break;
+                case SW:
+                    this.x -= 2;
+                    this.y += 2;
+                    break;
+            }
         }
     }
 
     public Laser reflejarLaser() {
-        Direction nuevaDireccion = null;
-
         // Refleja el laser dependiendo su direccion actual
-        switch (this.direccion) {
-            case NE:
-                nuevaDireccion = Direction.NW;
-                break;
-            case NW:
-                nuevaDireccion = Direction.NE;
-                break;
-            case SE:
-                nuevaDireccion = Direction.SW;
-                break;
-            case SW:
-                nuevaDireccion = Direction.SE;
-                break;
-        }
+        Direccion nuevaDireccion = switch (direccion) {
+            case NE -> Direccion.NW;
+            case NW -> Direccion.NE;
+            case SE -> Direccion.SW;
+            case SW -> Direccion.SE;
+        };
 
         // Devuelve el laser con la nueva direccion
         return new Laser(this.x, this.y, nuevaDireccion);
     }
+
+    public void refractarLaser() {
+        // Refracta el laser dependiendo su direccion actual
+        switch (direccion){
+            case NE, SE:
+                if (this.x % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    this.x += 2;
+                else                 // Si coord y es par, "sigo de largo" en y
+                    this.y += 2;
+                break;
+            case NW, SW:
+                if (this.x % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    this.x -= 2;
+                else                 // Si coord y es par, "sigo de largo" en y
+                    this.y += 2;
+                break;
+        }
+    }
 }
 
-enum Direction {
+enum Direccion {
     SE, SW, NE, NW
 }
