@@ -13,6 +13,10 @@ public class Laser {
         this.estoyActivo = true;
     }
 
+    public Direccion getDireccion(){
+        return direccion;
+    }
+
     public int getCoordX() {
         return this.x;
     }

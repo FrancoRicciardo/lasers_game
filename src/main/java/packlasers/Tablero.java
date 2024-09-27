@@ -1,14 +1,13 @@
 package packlasers;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Tablero {
     private Celda[][] grilla;
-    private ArrayList<Laser> lasers;
-    private ArrayList<Target> targets;
+    private final ArrayList<Laser> lasers;
+    private final ArrayList<Target> targets;
 
     public Tablero(String filePath) {
         this.lasers = new ArrayList<>();
@@ -20,50 +19,102 @@ public class Tablero {
         }
     }
 
+    public ArrayList<Laser> getLaser() {
+        return lasers;
+    }
+
+    public ArrayList<Target> getTarget() {
+        return targets;
+    }
+
+    // Método para obtener una celda en una posición específica
+    public Celda getCelda(int fila, int columna) {
+        if (fila >= 0 && fila < grilla.length && columna >= 0 && columna < grilla[0].length) {
+            return grilla[fila][columna];
+        } else {
+            throw new IndexOutOfBoundsException("Coordenadas fuera del rango de la grilla");
+        }
+    }
+
     // Carga el nivel entero (osea la grilla)
     public void loadLevel(String filePath) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filePath));
-        String linea;
-        int row = 0;
-
-        // Leo la primera sección (bloques y pisos)
-        while ((linea = br.readLine()) != null && !linea.isEmpty()) {
-            for (int col = 0; col < linea.length(); col++) {
-                char caracter = linea.charAt(col);
-                switch (caracter) {
-                    case 'F':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueOpacoFijo());
-                        break;
-                    case 'B':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueOpacoMovil());
-                        break;
-                    case 'R':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueEspejo());
-                        break;
-                    case 'G':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueDeVidrio());
-                        break;
-                    case 'C':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueDeCristal());
-                        break;
-                    case '.':
-                        grilla[row][col] = new Celda(true); // Piso vacío
-                        break;
-                    default:
-                        grilla[row][col] = new Celda(false); // Sin piso
-                        break;
-                }
-            }
-            row++;
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
+        if (inputStream == null) {
+            throw new FileNotFoundException(filePath);
         }
 
-        // Leo la segunda sección (emisores y objetivos)
-        while ((linea = br.readLine()) != null) {
+        List<String> lineas = leerLineasDelArchivo(inputStream);
+        int filas = 0;
+
+        // Contar filas hasta que se encuentre una línea vacía
+        while (filas < lineas.size() && !lineas.get(filas).isEmpty()) {
+            filas++;
+        }
+
+        // Inicializar la grilla con el número de filas y el tamaño de la primera línea
+        this.grilla = new Celda[filas][lineas.getFirst().length()];
+
+        // Cargar la primera sección de bloques y pisos
+        cargarBloquesYPisos(lineas.subList(0, filas));
+
+        // Cargar la sección de emisores y objetivos
+        if (filas < lineas.size()) {
+            cargarEmisoresYObjetivos(lineas.subList(filas + 1, lineas.size()));
+        }
+    }
+
+    private List<String> leerLineasDelArchivo(InputStream inputStream) throws IOException {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            List<String> lineas = new ArrayList<>();
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                lineas.add(linea);
+            }
+            return lineas;
+        }
+    }
+
+    private void cargarBloquesYPisos(List<String> lineas) {
+        for (int row = 0; row < lineas.size(); row++) {
+            String linea = lineas.get(row);
+            for (int col = 0; col < Math.min(linea.length(), this.grilla[row].length); col++) {
+                char caracter = linea.charAt(col);
+                this.grilla[row][col] = crearCelda(caracter);
+            }
+        }
+    }
+
+    private Celda crearCelda(char caracter) {
+        Celda celda = new Celda(true);
+        switch (caracter) {
+            case 'F':
+                celda.ponerBloque(new BloqueOpacoFijo());
+                break;
+            case 'B':
+                celda.ponerBloque(new BloqueOpacoMovil());
+                break;
+            case 'R':
+                celda.ponerBloque(new BloqueEspejo());
+                break;
+            case 'G':
+                celda.ponerBloque(new BloqueDeVidrio());
+                break;
+            case 'C':
+                celda.ponerBloque(new BloqueDeCristal());
+                break;
+            case '.':
+                // piso vacio
+                break;
+            default:
+                celda = new Celda(false); // Sin piso
+                break;
+        }
+        return celda;
+    }
+
+    private void cargarEmisoresYObjetivos(List<String> lineas) {
+        for (String linea : lineas) {
+            if (linea.isEmpty()) continue; // Verificamos que la línea no esté vacía
             String[] tokens = linea.split(" ");
             if (tokens[0].equals("E")) {
                 int col = Integer.parseInt(tokens[1]);
@@ -76,7 +127,6 @@ public class Tablero {
                 addTarget(new Target(col, fila));
             }
         }
-        br.close();
     }
 
     private void addLaser(Laser laser) {
@@ -90,9 +140,9 @@ public class Tablero {
     public void moverBloque(int fromX, int fromY, int toX, int toY) {
         Bloque block = this.grilla[fromX][fromY].getBloque();
         if (block != null && block.esMovible()) {
-            this.grilla[toX][toY].ponerBloque(block);  // Mueve el bloque
-            this.grilla[fromX][fromY].quitarBloque();  // Limpia la celda original
-        } else System.out.println("El bloque no se puede mover."); // Esta linea se borrará
+            this.grilla[toX][toY].ponerBloque(block);
+            this.grilla[fromX][fromY].quitarBloque();
+        }
     }
 
     public boolean chequearVictoria() {

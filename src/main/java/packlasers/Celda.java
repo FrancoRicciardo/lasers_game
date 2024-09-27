@@ -23,4 +23,8 @@ public class Celda {
     public boolean getPiso() {
         return this.tienePiso;
     }
+
+    public boolean tieneBloque() {
+        return bloque != null; // Devuelve true si hay un bloque, false si no
+    }
 }

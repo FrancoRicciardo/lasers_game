@@ -6,6 +6,7 @@ public interface Bloque {
 
     // Metodo que indica si el bloque es móvil o no
     boolean esMovible();
+
 }
 
 class BloqueDeCristal implements Bloque {
@@ -28,8 +29,8 @@ class BloqueDeVidrio implements Bloque {
         // Difracta el láser en dos direcciones:
 
         // 1) Refleja el láser como un espejo
-        Laser laserReflejado = laser.reflejarLaser();
-        laserReflejado.mover();
+        laser.reflejarLaser();
+        laser.mover();
 
         // 2) Deja que el láser principal siga en la misma dirección
         laser.mover();
@@ -69,8 +70,8 @@ class BloqueEspejo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
         // Refleja el láser como un espejo
-        Laser laserReflejado = laser.reflejarLaser();
-        laserReflejado.mover();
+        laser.reflejarLaser();
+        laser.mover();
     }
 
     @Override
@@ -78,3 +79,5 @@ class BloqueEspejo implements Bloque {
         return true; // Es movible
     }
 }
+
+

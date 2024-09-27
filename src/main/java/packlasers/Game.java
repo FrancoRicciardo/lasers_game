@@ -4,11 +4,7 @@ import java.util.ArrayList;
 
 public class Game {
     private static boolean salir;
-    private static ArrayList<Tablero> niveles;
-
-    public Game() {
-        niveles = new ArrayList<>();
-    }
+    private static ArrayList<Tablero> niveles = new ArrayList<>();
 
     public static boolean getSalir() {
         return salir;
