@@ -29,8 +29,8 @@ class BloqueDeVidrio implements Bloque {
         // Difracta el láser en dos direcciones:
 
         // 1) Refleja el láser como un espejo
-        laser.reflejarLaser();
-        laser.mover();
+        Laser laserReflejado = laser.reflejarLaser();
+        laserReflejado.mover();
 
         // 2) Deja que el láser principal siga en la misma dirección
         laser.mover();

@@ -27,13 +27,12 @@ public class Tablero {
         return targets;
     }
 
-    // Método para obtener una celda en una posición específica
+
     public Celda getCelda(int fila, int columna) {
         if (fila >= 0 && fila < grilla.length && columna >= 0 && columna < grilla[0].length) {
             return grilla[fila][columna];
-        } else {
-            throw new IndexOutOfBoundsException("Coordenadas fuera del rango de la grilla");
         }
+        return null;
     }
 
     // Carga el nivel entero (osea la grilla)
@@ -103,7 +102,7 @@ public class Tablero {
                 celda.ponerBloque(new BloqueDeCristal());
                 break;
             case '.':
-                // piso vacio
+                celda = new Celda(true); // Piso
                 break;
             default:
                 celda = new Celda(false); // Sin piso
@@ -114,7 +113,7 @@ public class Tablero {
 
     private void cargarEmisoresYObjetivos(List<String> lineas) {
         for (String linea : lineas) {
-            if (linea.isEmpty()) continue; // Verificamos que la línea no esté vacía
+            if (linea.isEmpty()) continue;
             String[] tokens = linea.split(" ");
             if (tokens[0].equals("E")) {
                 int col = Integer.parseInt(tokens[1]);
