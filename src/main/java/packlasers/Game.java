@@ -8,6 +8,7 @@ public class Game {
 
     public Game() {
         niveles = new ArrayList<>();
+        salir = false;
     }
 
     public static boolean getSalir() {
@@ -26,12 +27,15 @@ public class Game {
         niveles.add(nivel);
     }
 
-    public static void jugar(Tablero nivel){
+    public static void jugarTurno(Tablero nivel){
         // TODO: probablamente sera jugar un turno de moverBloque
+        while(!salir){
+            // hago cosas, juego el turno
 
-        // si llegue a todos los targets:
+            // si llegue a todos los targets:
             setSalir(true);
-            return;
+        }
+        return;
     }
 }
 

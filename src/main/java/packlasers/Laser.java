@@ -1,24 +1,19 @@
 package packlasers;
 
+import java.util.ArrayList;
+
 public class Laser {
-    private int x;
-    private int y;
+    private final Posicion startPosition;
     private Direccion direccion;
+    private ArrayList<Posicion> trayectoria;
     private boolean estoyActivo;
 
     public Laser(int x, int y, Direccion direccion) {
-        this.x = x;
-        this.y = y;
+        this.startPosition = new Posicion(x, y);
         this.direccion = direccion;
         this.estoyActivo = true;
-    }
-
-    public int getCoordX() {
-        return this.x;
-    }
-
-    public int getCoordY() {
-        return this.y;
+        this.trayectoria = new ArrayList<>();
+        this.trayectoria.add(startPosition);
     }
 
     public void fuiAbsorbido() {
@@ -33,59 +28,61 @@ public class Laser {
         return this.estoyActivo;
     }
 
-    public void mover(){
-        // Mueve el laser al extremo opuesto del bloquee
+    public Direccion getDireccion() {
+        return this.direccion;
+    }
+
+    public ArrayList<Posicion> getTrayectoria() {
+        return this.trayectoria;
+    }
+
+    public Posicion currentPosition(){
+        return this.trayectoria.getLast();
+    }
+
+    public void moverPosicion(){
+        // Mueve el laser una posicion
         if(estoyActivo) {
-            switch (direccion) {
-                case NE:
-                    this.x += 2;
-                    this.y -= 2;
-                    break;
-                case NW:
-                    this.x -= 2;
-                    this.y -= 2;
-                    break;
-                case SE:
-                    this.x += 2;
-                    this.y += 2;
-                    break;
-                case SW:
-                    this.x -= 2;
-                    this.y += 2;
-                    break;
-            }
+            Posicion currentPos = currentPosition();
+            currentPos.move(direccion);
+            trayectoria.add(currentPos);
         }
     }
 
-    public Laser reflejarLaser() {
-        // Refleja el laser dependiendo su direccion actual
-        Direccion nuevaDireccion = switch (direccion) {
+    public void reflejarLaser() {
+        /* Refleja el laser dependiendo su direccion actual y la actualiza */
+        this.direccion = switch (direccion) {
             case NE -> Direccion.NW;
             case NW -> Direccion.NE;
             case SE -> Direccion.SW;
             case SW -> Direccion.SE;
         };
 
-        // Devuelve el laser con la nueva direccion
-        return new Laser(this.x, this.y, nuevaDireccion);
+        /* Avanzo una posicion en esa direccion nueva */
+        moverPosicion();
     }
 
     public void refractarLaser() {
-        // Refracta el laser dependiendo su direccion actual
+        /* Refracta el laser dependiendo su direccion actual */
+        Posicion currentPos = currentPosition();
         switch (direccion){
             case NE, SE:
-                if (this.x % 2 == 0) // Si coord x es par, "sigo de largo" en x
-                    this.x += 2;
-                else                 // Si coord y es par, "sigo de largo" en y
-                    this.y += 2;
+                if (currentPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    currentPos.setCoordX(currentPos.getCoordX() + 2);
+                else   /* Si coord y es par, "sigo de largo" en y */
+                    currentPos.setCoordY(currentPos.getCoordY() + 2);
                 break;
             case NW, SW:
-                if (this.x % 2 == 0) // Si coord x es par, "sigo de largo" en x
-                    this.x -= 2;
-                else                 // Si coord y es par, "sigo de largo" en y
-                    this.y += 2;
+                if (currentPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    currentPos.setCoordX(currentPos.getCoordX() - 2);
+                else   /* Si coord y es par, "sigo de largo" en y */
+                    currentPos.setCoordY(currentPos.getCoordY() + 2);
                 break;
         }
+
+        /* Avanzo una posicion en esa direccion nueva */
+        currentPos.move(direccion);
+        trayectoria.add(currentPos);
     }
 }
 

@@ -13,6 +13,7 @@ public class Tablero {
     public Tablero(String filePath) {
         this.lasers = new ArrayList<>();
         this.targets = new ArrayList<>();
+
         try {
             loadLevel(filePath);
         } catch (IOException e) {
@@ -32,30 +33,30 @@ public class Tablero {
                 char caracter = linea.charAt(col);
                 switch (caracter) {
                     case 'F':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueOpacoFijo());
+                        this.grilla[row][col] = new Celda(true);
+                        this.grilla[row][col].ponerBloque(new BloqueOpacoFijo());
                         break;
                     case 'B':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueOpacoMovil());
+                        this.grilla[row][col] = new Celda(true);
+                        this.grilla[row][col].ponerBloque(new BloqueOpacoMovil());
                         break;
                     case 'R':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueEspejo());
+                        this.grilla[row][col] = new Celda(true);
+                        this.grilla[row][col].ponerBloque(new BloqueEspejo());
                         break;
                     case 'G':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueDeVidrio());
+                        this.grilla[row][col] = new Celda(true);
+                        this.grilla[row][col].ponerBloque(new BloqueDeVidrio());
                         break;
                     case 'C':
-                        grilla[row][col] = new Celda(true);
-                        grilla[row][col].ponerBloque(new BloqueDeCristal());
+                        this.grilla[row][col] = new Celda(true);
+                        this.grilla[row][col].ponerBloque(new BloqueDeCristal());
                         break;
                     case '.':
-                        grilla[row][col] = new Celda(true); // Piso vacío
+                        this.grilla[row][col] = new Celda(true); // Piso vacío
                         break;
                     default:
-                        grilla[row][col] = new Celda(false); // Sin piso
+                        this.grilla[row][col] = new Celda(false); // Sin piso
                         break;
                 }
             }
@@ -87,12 +88,25 @@ public class Tablero {
         this.targets.add(target);
     }
 
-    public void moverBloque(int fromX, int fromY, int toX, int toY) {
-        Bloque block = this.grilla[fromX][fromY].getBloque();
-        if (block != null && block.esMovible()) {
-            this.grilla[toX][toY].ponerBloque(block);  // Mueve el bloque
-            this.grilla[fromX][fromY].quitarBloque();  // Limpia la celda original
-        } else System.out.println("El bloque no se puede mover."); // Esta linea se borrará
+    public Celda getCelda(int fila, int columna) {
+        if (fila >= 0 && fila < grilla.length && columna >= 0 && columna < grilla[0].length) {
+            return grilla[fila][columna];
+        }
+        return null;
+    }
+
+    public void moverBloque(Posicion fromPos, Posicion toPos) {
+        Celda fromCelda = getCelda(fromPos.getCoordX(), fromPos.getCoordY());
+        Celda toCelda = getCelda(toPos.getCoordX(), toPos.getCoordY());
+
+        if(fromCelda == null || toCelda == null) return;
+        if(!fromCelda.tieneBloque()) return;
+
+        Bloque block = fromCelda.getBloque();
+        if (block.esMovible() && toCelda.getPiso() && !toCelda.tieneBloque()) {
+            toCelda.ponerBloque(block);  // Mueve el bloque
+            fromCelda.quitarBloque();  // Limpia la celda original
+        } else System.out.println("El bloque no se puede mover."); // Esta linea probablemente no sea un print, quizas un return
     }
 
     public boolean chequearVictoria() {
@@ -103,20 +117,25 @@ public class Tablero {
         return true; // Si todos los objetivos han sido alcanzados, el nivel está completo
     }
 
-    public void moveLaser(Laser laser) {
-        while (laser.isActive()) {
-            int nextX = laser.getCoordX();
-            int nextY = laser.getCoordY();
+    public void moverLaser(Laser laser) {
+        /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
+        Posicion nextPos = laser.currentPosition();
+        nextPos.move(laser.getDireccion());
+        Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+        if(nextCelda == null) return;
 
-            laser.mover(); // Actualizar la posición del láser
-            Bloque block = grilla[nextX][nextY].getBloque();
+        /* Mientras el laser este activo y haya piso en la siguiente posicion... */
+        while (laser.isActive() && nextCelda.getPiso()) {
+
+            laser.moverPosicion(); // Actualizar la posición del láser
+            Bloque block = getCelda(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY()).getBloque();
 
             // Si hay un bloque, interactuar con el láser
             if (block != null) block.interactuarLaser(laser);
 
             // Verificar si el láser ha alcanzado un objetivo
             for (Target target : targets) {
-                if (target.getCoordX() == laser.getCoordX() && target.getCoordY() == laser.getCoordY())
+                if (laser.currentPosition().equals(target.getPosicion()))
                     target.fuiAlcanzado(); // Marcar el objetivo como alcanzado
                 else target.noFuiAlcanzado();
             }

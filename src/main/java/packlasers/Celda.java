@@ -20,6 +20,10 @@ public class Celda {
         this.bloque = null;
     }
 
+    public boolean tieneBloque() {
+        return bloque != null; // Devuelve true si hay un bloque, false si no
+    }
+
     public boolean getPiso() {
         return this.tienePiso;
     }

@@ -11,6 +11,8 @@ public interface Bloque {
 class BloqueDeCristal implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
+
+        laser.puedoContinuar();
         // Refracta el laser, continuando en linea recta por el extremo opuesto
         laser.refractarLaser();
 
@@ -27,12 +29,12 @@ class BloqueDeVidrio implements Bloque {
     public void interactuarLaser(Laser laser) {
         // Difracta el láser en dos direcciones:
 
+        laser.puedoContinuar();
         // 1) Refleja el láser como un espejo
-        Laser laserReflejado = laser.reflejarLaser();
-        laserReflejado.mover();
+        laser.reflejarLaser();
 
         // 2) Deja que el láser principal siga en la misma dirección
-        laser.mover();
+        laser.moverPosicion();
     }
 
     @Override
@@ -68,9 +70,10 @@ class BloqueOpacoFijo implements Bloque {
 class BloqueEspejo implements Bloque {
     @Override
     public void interactuarLaser(Laser laser) {
+
+        laser.puedoContinuar();
         // Refleja el láser como un espejo
-        Laser laserReflejado = laser.reflejarLaser();
-        laserReflejado.mover();
+        laser.reflejarLaser();
     }
 
     @Override
