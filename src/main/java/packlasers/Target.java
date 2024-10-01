@@ -1,13 +1,11 @@
 package packlasers;
 
 public class Target {
-    private final int x;
-    private final int y;
+    private final Posicion posicion;
     private boolean meAlcanzaron;
 
     public Target(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.posicion = new Posicion(x, y);
         this.meAlcanzaron = false;
     }
 
@@ -23,11 +21,8 @@ public class Target {
         this.meAlcanzaron = false;
     }
 
-    public int getCoordX() {
-        return this.x;
+    public Posicion getPosicion() {
+        return posicion;
     }
 
-    public int getCoordY() {
-        return this.y;
-    }
 }

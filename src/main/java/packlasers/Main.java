@@ -25,7 +25,7 @@ public class Main {
         System.out.println("Que nivel desea jugar? (Elija del 1 al 6)");
         int i = 1; //leer de pantalla;
         while (!Game.getSalir()) {
-            Game.jugar(Game.getLevel(i-1));
+            Game.jugarTurno(Game.getLevel(i-1));
         }
     }
 }
