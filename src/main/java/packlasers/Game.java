@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 public class Game {
     private static boolean salir;
-    private static ArrayList<Tablero> niveles;
+    private static ArrayList<Tablero> niveles = new ArrayList<>();
 
     public Game() {
-        niveles = new ArrayList<>();
         salir = false;
     }
 
@@ -35,7 +34,6 @@ public class Game {
             // si llegue a todos los targets:
             setSalir(true);
         }
-        return;
     }
 }
 
