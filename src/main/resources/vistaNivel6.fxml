@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<HBox fx:id="rootHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="437.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox fx:id="listaBotonesVBox" prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level1" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level2" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level3" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level4" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level5" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level6" />
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </VBox>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="266.0" prefWidth="175.0">
+         <children>
+            <GridPane fx:id="grillaLvl1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="150.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d9899" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d9899" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Circle fx:id="circleLaser03" fill="RED" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Circle>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Circle fx:id="circleTarget85" fill="WHITE" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="35.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Circle fx:id="circleTarget34" fill="WHITE" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets bottom="38.0" left="15.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d9899" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.rowIndex="3" />
+                  <Circle fx:id="circleTarget16" fill="WHITE" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets bottom="38.0" left="15.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d9899" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Circle fx:id="circleLaser72" fill="RED" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets left="15.0" top="38.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Circle fx:id="circleLaser54" fill="RED" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="15.0" top="40.0" />
+                     </GridPane.margin>
+                  </Circle>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>
