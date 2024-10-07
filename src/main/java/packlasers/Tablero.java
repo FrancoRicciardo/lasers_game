@@ -172,27 +172,41 @@ public class Tablero {
 
     public void moverLaser(Laser laser) {
         /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
-        Posicion nextPos = laser.currentPosition();
+        Posicion nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
         nextPos.move(laser.getDireccion());
-        Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
-        if(nextCelda == null) return;
 
-        /* Mientras el laser este activo y haya piso en la siguiente posicion... */
+        // Verifica si la celda siguiente existe
+        Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+        if (nextCelda == null) return;
+
+        // Mientras el láser esté activo y haya piso en la siguiente posición
         while (laser.isActive() && nextCelda.getPiso()) {
 
-            laser.moverPosicion(); // Actualizar la posición del láser
-            Bloque block = getCelda(laser.currentPosition().getCoordX(),
-                    laser.currentPosition().getCoordY()).getBloque();
+            // Actualiza la posición del láser
+            laser.moverPosicion();
 
-            // Si hay un bloque, interactuar con el láser
-            if (block != null) block.interactuarLaser(laser);
+            Bloque block = getCelda(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY()).getBloque();
+            if (block != null) {
+                // Interactuar con el bloque si existe bloque
+                block.interactuarLaser(laser);
+            }
 
             // Verificar si el láser ha alcanzado un objetivo
             for (Target target : targets) {
-                if (laser.currentPosition().equals(target.getPosicion()))
-                    target.fuiAlcanzado(); // Marcar el objetivo como alcanzado
-                else target.noFuiAlcanzado();
+                if (laser.currentPosition().equals(target.getPosicion())) {
+                    target.fuiAlcanzado();
+                } else {
+                    target.noFuiAlcanzado();
+                }
             }
+
+            // Prever la próxima celda (actualizar nextPos para continuar)
+            nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
+            nextPos.move(laser.getDireccion());
+            nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+
+            // Salir si la celda siguiente es nula (fuera de los límites)
+            if (nextCelda == null) return;
         }
     }
 }

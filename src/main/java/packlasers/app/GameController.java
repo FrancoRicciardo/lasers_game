@@ -13,6 +13,8 @@ import packlasers.*;
 
 import java.util.ArrayList;
 
+import static javafx.scene.paint.Color.RED;
+
 public class GameController {
     private GameView gameView;
 
@@ -159,6 +161,10 @@ public class GameController {
             }
             event.setDropCompleted(success);
             event.consume();
+            if(success){
+                mostrarLaser(grilla);
+                //tablero.chequearVictoria();
+            }
         });
     }
 
@@ -173,32 +179,42 @@ public class GameController {
     }
 
     private void mostrarLaser(GridPane grilla){
-        /*
         // Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser
         var copiaChildren = new ArrayList<>(grilla.getChildren());
+
         for (Node child : copiaChildren) {
-            // Aquí puedes modificar la lista original sin problemas
-            if (child instanceof Line) {
+            if (child instanceof Line && ((Line) child).getStroke() == RED) {
                 grilla.getChildren().remove(child);
             }
         }
         for (Laser laser : game.getTableroActual().getLasers()) {
             laser.reiniciarTrayectoria();
             game.getTableroActual().moverLaser(laser);
-            Direccion direccion = laser.getDireccion();
 
-            for(Posicion pos: laser.getTrayectoria()){
-                Posicion sigPos = new Posicion(pos.getCoordX(), pos.getCoordY());
-                sigPos.move(direccion);
-                Line laserLine = new Line(pos.getCoordX(), pos.getCoordY(),
-                        sigPos.getCoordX(),
-                        sigPos.getCoordY());
-                laserLine.setStroke(Color.RED);
-                laserLine.setStrokeWidth(2);
-                grilla.getChildren().add(laserLine);
+            for(int i = 0; i < laser.getTrayectoria().size()-1; i++){
+                dibujarLaser(grilla, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
             }
         }
-        */
+    }
+
+    private void dibujarLaser(GridPane grilla, Posicion fromPos, Posicion toPos){
+        double fromXView = convertirACoordenadaX(fromPos.getCoordX());
+        double fromYView = convertirACoordenadaY(fromPos.getCoordY());
+        double toXView = convertirACoordenadaX(toPos.getCoordX());
+        double toYView = convertirACoordenadaY(toPos.getCoordY());
+
+        Line laserLine = new Line(fromXView, fromYView, toXView, toYView);
+        laserLine.setStrokeWidth(2);
+        laserLine.setStroke(RED);
+        grilla.getChildren().add(laserLine);
+    }
+
+    // Convierte las coordenadas del modelo (grilla) a coordenadas de píxeles
+    private double convertirACoordenadaX(int x) {
+        return x * 40 + 40 / 2.0;  // Coordenada X del centro de la celda
+    }
+    private double convertirACoordenadaY(int y) {
+        return y * 40 + 40 / 2.0; // Coordenada Y del centro de la celda
     }
 
     public ToggleButton getButtonForLevel(int nivel) {
