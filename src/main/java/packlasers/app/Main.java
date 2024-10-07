@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import packlasers.Game;
 public class Main extends Application {
@@ -16,9 +17,16 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/vistaNivel1.fxml"));
         Parent root = loader.load();
 
-        LevelController controller = loader.getController();
+        GameController controller = loader.getController();
         controller.setGame(game);        // Establecer el objeto Game
-        controller.setGameView(gameView); // Establecer el objeto GameView
+        controller.setGameView(gameView);
+        GridPane grilla = (GridPane) root.lookup("#grilla");
+        if (grilla == null) {
+            System.out.println("No se pudo encontrar la grilla.");
+            return;
+        }
+
+        controller.inicializarJuego(grilla);
 
         stage.setScene(new Scene(root));
         stage.setTitle("Lasers");

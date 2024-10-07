@@ -29,20 +29,20 @@ public class Posicion {
     public void move(Direccion direction) {
         switch (direction) {
             case NE:
-                this.x += 2;
-                this.y -= 2;
+                this.x++;
+                this.y--;
                 break;
             case NW:
-                this.x -= 2;
-                this.y -= 2;
+                this.x--;
+                this.y--;
                 break;
             case SE:
-                this.x += 2;
-                this.y += 2;
+                this.x++;
+                this.y++;
                 break;
             case SW:
-                this.x -= 2;
-                this.y += 2;
+                this.x--;
+                this.y++;
                 break;
         }
     }

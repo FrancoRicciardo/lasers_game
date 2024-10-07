@@ -1,11 +1,47 @@
 package packlasers;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
-    private static boolean salir;
+    private final List<Tablero> niveles;
+    private Tablero tableroActual = new Tablero("level1.dat");
 
     public Game() {
-        salir = false;
+        niveles = new ArrayList<>();
+        cargarNiveles();
     }
+
+    private void cargarNiveles() {
+        niveles.add(new Tablero("level1.dat"));
+        niveles.add(new Tablero("level2.dat"));
+        niveles.add(new Tablero("level3.dat"));
+        niveles.add(new Tablero("level4.dat"));
+        niveles.add(new Tablero("level5.dat"));
+        niveles.add(new Tablero("level6.dat"));
+    }
+
+    private String getNivelDat(int nivel){
+        return switch (nivel) {
+            case 1 -> "level1.dat";
+            case 2 -> "level2.dat";
+            case 3 -> "level3.dat";
+            case 4 -> "level4.dat";
+            case 5 -> "level5.dat";
+            case 6 -> "level6.dat";
+            default -> null;
+        };
+    }
+
+    // Obtener un Tablero dado el índice
+    public Tablero getNivel(int index) {
+        if (index >= 0 && index < niveles.size()) {
+            return niveles.get(index);
+        }
+        return null; // Retorna null si el índice está fuera de rango
+    }
+
 
     public String getNivelFXML(int nivel) {
         return switch (nivel) {
@@ -19,21 +55,20 @@ public class Game {
         };
     }
 
-    public static boolean getSalir() {
-        return salir;
+    public void setTableroActual(Tablero tablero){
+        tableroActual = tablero;
     }
 
-    public static void setSalir(boolean salir) {
-        Game.salir = salir;
+    public Tablero getTableroActual(){
+        return tableroActual;
     }
 
-    public static void jugarTurno(Tablero nivel){
-        // TODO: probablamente sera jugar un turno de moverBloque
-        while(!salir){
-            // hago cosas, juego el turno
-
-            // si llegue a todos los targets:
-            setSalir(true);
+    public void reiniciarNivel(int nivel){
+        try {
+            tableroActual.loadLevel(getNivelDat(nivel));
+            niveles.set(nivel -1, tableroActual);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

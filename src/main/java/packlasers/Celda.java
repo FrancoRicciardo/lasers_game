@@ -3,9 +3,15 @@ package packlasers;
 public class Celda {
     private final boolean tienePiso;
     private Bloque bloque;
+    private Posicion posicion;
 
-    public Celda(boolean hasFloor) {
+    public Celda(boolean hasFloor, Posicion posicion) {
         this.tienePiso = hasFloor;
+        this.posicion = posicion;
+    }
+
+    public Posicion getPosicion() {
+        return posicion;
     }
 
     public void ponerBloque(Bloque block) {
@@ -27,4 +33,5 @@ public class Celda {
     public boolean getPiso() {
         return this.tienePiso;
     }
+
 }

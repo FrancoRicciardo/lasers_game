@@ -6,6 +6,9 @@ public interface Bloque {
 
     // Metodo que indica si el bloque es móvil o no
     boolean esMovible();
+
+    // Metodo para obtener el nombre del bloque
+    String getId();
 }
 
 class BloqueDeCristal implements Bloque {
@@ -21,6 +24,11 @@ class BloqueDeCristal implements Bloque {
     @Override
     public boolean esMovible() {
         return true; // Es movible
+    }
+
+    @Override
+    public String getId() {
+        return "C";
     }
 }
 
@@ -41,6 +49,11 @@ class BloqueDeVidrio implements Bloque {
     public boolean esMovible() {
         return true; // Es movible
     }
+
+    @Override
+    public String getId() {
+        return "G";
+    }
 }
 
 class BloqueOpacoMovil implements Bloque {
@@ -53,6 +66,13 @@ class BloqueOpacoMovil implements Bloque {
     public boolean esMovible() {
         return true; // Es movible
     }
+
+    @Override
+    public String getId() {
+        return "B";
+    }
+
+
 }
 
 class BloqueOpacoFijo implements Bloque {
@@ -64,6 +84,11 @@ class BloqueOpacoFijo implements Bloque {
     @Override
     public boolean esMovible() {
         return false; // NO es movible
+    }
+
+    @Override
+    public String getId() {
+        return "F";
     }
 }
 
@@ -79,5 +104,10 @@ class BloqueEspejo implements Bloque {
     @Override
     public boolean esMovible() {
         return true; // Es movible
+    }
+
+    @Override
+    public String getId() {
+        return "R";
     }
 }

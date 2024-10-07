@@ -84,8 +84,10 @@ public class Laser {
         currentPos.move(direccion);
         trayectoria.add(currentPos);
     }
+
+    public void reiniciarTrayectoria(){
+        this.trayectoria.clear();
+        this.trayectoria.add(startPosition);
+    }
 }
 
-enum Direccion {
-    SE, SW, NE, NW
-}

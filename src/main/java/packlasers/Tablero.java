@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Tablero {
     private Celda[][] grilla;
-    private ArrayList<Laser> lasers;
-    private ArrayList<Target> targets;
+    private final ArrayList<Laser> lasers;
+    private final ArrayList<Target> targets;
 
     public Tablero(String filePath) {
         this.lasers = new ArrayList<>();
@@ -19,6 +19,13 @@ public class Tablero {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Celda getCelda(int columna, int fila) {
+        if (columna >= 0 && columna < grilla.length && fila >= 0 && fila < grilla[0].length) {
+            return grilla[columna][fila];
+        }
+        return null;
     }
 
     public ArrayList<Laser> getLasers() {
@@ -45,7 +52,7 @@ public class Tablero {
         }
 
         // Inicializo la grilla con el número de filas y el tamaño de la primera línea
-        this.grilla = new Celda[filas][lineas.getFirst().length()];
+        this.grilla = new Celda[lineas.getFirst().length()][filas];
 
         // Cargar la primera seccion de bloques y pisos
         cargarBloquesYPisos(lineas.subList(0, filas));
@@ -72,34 +79,44 @@ public class Tablero {
             String linea = lineas.get(row);
             for (int col = 0; col < linea.length(); col++) {
                 char caracter = linea.charAt(col);
-                this.grilla[row][col] = crearCelda(caracter);
+                Posicion posicion = new Posicion(col, row);
+                this.grilla[col][row] = crearCelda(caracter, posicion);
             }
         }
     }
 
-    private Celda crearCelda(char caracter) {
-        Celda celda = new Celda(true);
+    public Celda[][] getGrilla(){
+        return grilla;
+    }
+
+    private Celda crearCelda(char caracter, Posicion posicion) {
+        Celda celda;
         switch (caracter) {
             case 'F':
+                celda = new Celda(true, posicion);
                 celda.ponerBloque(new BloqueOpacoFijo());
                 break;
             case 'B':
+                celda = new Celda(true, posicion);
                 celda.ponerBloque(new BloqueOpacoMovil());
                 break;
             case 'R':
+                celda = new Celda(true, posicion);
                 celda.ponerBloque(new BloqueEspejo());
                 break;
             case 'G':
+                celda = new Celda(true, posicion);
                 celda.ponerBloque(new BloqueDeVidrio());
                 break;
             case 'C':
+                celda = new Celda(true, posicion);
                 celda.ponerBloque(new BloqueDeCristal());
                 break;
             case '.':
-                celda = new Celda(true);
+                celda = new Celda(true, posicion); // Celda vacía con piso
                 break;
             default:
-                celda = new Celda(false); // Sin piso
+                celda = new Celda(false, posicion); // Celda sin piso
                 break;
         }
         return celda;
@@ -130,25 +147,19 @@ public class Tablero {
         this.targets.add(target);
     }
 
-    public Celda getCelda(int fila, int columna) {
-        if (fila >= 0 && fila < grilla.length && columna >= 0 && columna < grilla[0].length) {
-            return grilla[fila][columna];
-        }
-        return null;
-    }
 
-    public void moverBloque(Posicion fromPos, Posicion toPos) {
+    public boolean moverBloque(Posicion fromPos, Posicion toPos) {
         Celda fromCelda = getCelda(fromPos.getCoordX(), fromPos.getCoordY());
         Celda toCelda = getCelda(toPos.getCoordX(), toPos.getCoordY());
 
-        if(fromCelda == null || toCelda == null) return;
-        if(!fromCelda.tieneBloque()) return;
-
-        Bloque block = fromCelda.getBloque();
-        if (block.esMovible() && toCelda.getPiso() && !toCelda.tieneBloque()) {
-            toCelda.ponerBloque(block);  // Mueve el bloque
-            fromCelda.quitarBloque();  // Limpia la celda original
-        } else System.out.println("El bloque no se puede mover."); // Esta linea probablemente no sea un print, quizas un return
+        // Verifica si el bloque se puede mover
+        if (fromCelda.tieneBloque() && toCelda.getPiso() && !toCelda.tieneBloque()) {
+            Bloque bloque = fromCelda.getBloque();
+            fromCelda.quitarBloque(); // Quitar bloque de la celda original
+            toCelda.ponerBloque(bloque); // Poner bloque en la nueva celda
+            return true;
+        }
+        return false;
     }
 
     public boolean chequearVictoria() {
@@ -170,7 +181,8 @@ public class Tablero {
         while (laser.isActive() && nextCelda.getPiso()) {
 
             laser.moverPosicion(); // Actualizar la posición del láser
-            Bloque block = getCelda(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY()).getBloque();
+            Bloque block = getCelda(laser.currentPosition().getCoordX(),
+                    laser.currentPosition().getCoordY()).getBloque();
 
             // Si hay un bloque, interactuar con el láser
             if (block != null) block.interactuarLaser(laser);
