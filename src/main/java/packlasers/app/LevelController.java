@@ -68,7 +68,7 @@ public class LevelController {
         return toggleGroup;
     }
 
-    // Método para seleccionar el nivel y desmarcar otros botones
+    // Metodo para seleccionar el nivel y desmarcar otros botones
     private void seleccionarNivel( int nivel) {
         gameView.cargarNivel(nivel);
      }

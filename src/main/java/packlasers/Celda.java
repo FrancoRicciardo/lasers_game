@@ -3,7 +3,7 @@ package packlasers;
 public class Celda {
     private final boolean tienePiso;
     private Bloque bloque;
-    private Posicion posicion;
+    private final Posicion posicion;
 
     public Celda(boolean hasFloor, Posicion posicion) {
         this.tienePiso = hasFloor;

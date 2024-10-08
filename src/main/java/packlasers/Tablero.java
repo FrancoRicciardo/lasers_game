@@ -85,10 +85,6 @@ public class Tablero {
         }
     }
 
-    public Celda[][] getGrilla(){
-        return grilla;
-    }
-
     private Celda crearCelda(char caracter, Posicion posicion) {
         Celda celda;
         switch (caracter) {
@@ -148,7 +144,7 @@ public class Tablero {
     }
 
 
-    public boolean moverBloque(Posicion fromPos, Posicion toPos) {
+    public void moverBloque(Posicion fromPos, Posicion toPos) {
         Celda fromCelda = getCelda(fromPos.getCoordX(), fromPos.getCoordY());
         Celda toCelda = getCelda(toPos.getCoordX(), toPos.getCoordY());
 
@@ -157,9 +153,7 @@ public class Tablero {
             Bloque bloque = fromCelda.getBloque();
             fromCelda.quitarBloque(); // Quitar bloque de la celda original
             toCelda.ponerBloque(bloque); // Poner bloque en la nueva celda
-            return true;
         }
-        return false;
     }
 
     public boolean chequearVictoria() {

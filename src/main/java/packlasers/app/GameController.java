@@ -17,6 +17,9 @@ import static javafx.scene.paint.Color.RED;
 
 public class GameController {
     private GameView gameView;
+    private ToggleGroup toggleGroup;
+    private Game game;
+    public static boolean SALIR = false;
 
     @FXML
     private ToggleButton buttonLevel1, buttonLevel2,
@@ -24,10 +27,6 @@ public class GameController {
 
     @FXML
     private GridPane grilla;
-
-    private ToggleGroup toggleGroup;
-    private Game game;
-    private boolean juegoInicializado = false;
 
     public void setGame(Game game) {
         this.game = game;
@@ -68,28 +67,27 @@ public class GameController {
     }
 
     public void inicializarJuego(GridPane grilla) {
-        if (juegoInicializado) {
-            mostrarLaser(grilla);
-            configurarEventosBloques(grilla);
-            return;
-        }
-
         System.out.println("Inicializando juego...");
         mostrarLaser(grilla);
+        if(SALIR) return;
         configurarEventosBloques(grilla);
-        juegoInicializado = true;
+        if(SALIR) return;
     }
 
     private void configurarEventosBloques(GridPane grilla) {
         System.out.println("Configurando eventos para bloques...");
         grilla.setOnMousePressed(event -> {
+            if(SALIR) {
+                event.consume();
+                return;
+            }
             Node clickedNode = event.getPickResult().getIntersectedNode();
             if (clickedNode != null && GridPane.getRowIndex(clickedNode) != null &&
                     GridPane.getColumnIndex(clickedNode) != null && clickedNode instanceof Rectangle) {
                 int row = GridPane.getRowIndex(clickedNode);
                 int column = GridPane.getColumnIndex(clickedNode);
 
-                System.out.println(column + " " + row);
+                System.out.println("Bloque seleccionado: (" + column + " " + row + ")");
 
                 Tablero tablero = game.getTableroActual();
                 // Aquí puedes obtener el bloque en la posición (row, column)
@@ -107,8 +105,6 @@ public class GameController {
         Tablero tablero = game.getTableroActual();
         // Evento que detecta el inicio del arrastre
         bloque.setOnDragDetected(event -> {
-            System.out.println("Iniciando arrastre del bloque: " + bloque);
-
             // Iniciar arrastre con el bloque seleccionado
             Dragboard dragboard = bloque.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
@@ -163,7 +159,8 @@ public class GameController {
             event.consume();
             if(success){
                 mostrarLaser(grilla);
-                //tablero.chequearVictoria();
+                SALIR = tablero.chequearVictoria();
+                return;
             }
         });
     }
@@ -205,7 +202,7 @@ public class GameController {
 
         Line laserLine = new Line(fromXView, fromYView, toXView, toYView);
         laserLine.setStrokeWidth(2);
-        laserLine.setStroke(RED);
+        laserLine.setStroke(Color.RED);
         grilla.getChildren().add(laserLine);
     }
 
