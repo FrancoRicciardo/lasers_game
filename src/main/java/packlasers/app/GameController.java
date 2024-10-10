@@ -1,7 +1,9 @@
 package packlasers.app;
 
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.*;
@@ -20,6 +22,8 @@ public class GameController {
     private ToggleGroup toggleGroup;
     private Game game;
     public static boolean SALIR = false;
+    public static int CELL_W = 40;
+    public static int CELL_H = 40;
 
     @FXML
     private ToggleButton buttonLevel1, buttonLevel2,
@@ -66,15 +70,15 @@ public class GameController {
 
     }
 
-    public void inicializarJuego(GridPane grilla) {
+    public void inicializarJuego(GridPane grilla, Group canvas) {
         System.out.println("Inicializando juego...");
-        mostrarLaser(grilla);
+        mostrarLaser(canvas);
         if(SALIR) return;
-        configurarEventosBloques(grilla);
+        configurarEventosBloques(grilla, canvas);
         if(SALIR) return;
     }
 
-    private void configurarEventosBloques(GridPane grilla) {
+    private void configurarEventosBloques(GridPane grilla, Group canvas) {
         System.out.println("Configurando eventos para bloques...");
         grilla.setOnMousePressed(event -> {
             if(SALIR) {
@@ -90,18 +94,18 @@ public class GameController {
                 System.out.println("Bloque seleccionado: (" + column + " " + row + ")");
 
                 Tablero tablero = game.getTableroActual();
-                // Aquí puedes obtener el bloque en la posición (row, column)
-                Celda selectedBlock = tablero.getCelda(column, row);
+                // Aquí puedes obtener el bloque en la posición 2x, 2y del Modelo
+                Celda selectedBlock = tablero.getCelda(2*column, 2*row);
 
                 if (selectedBlock.getBloque() != null && selectedBlock.getBloque().esMovible()) {
-                    configurarArrastre(clickedNode, grilla);
+                    configurarArrastre(clickedNode, grilla, canvas);
                 }
             }
             event.consume();
         });
     }
 
-    private void configurarArrastre(Node bloque, GridPane grilla) {
+    private void configurarArrastre(Node bloque, GridPane grilla, Group canvas) {
         Tablero tablero = game.getTableroActual();
         // Evento que detecta el inicio del arrastre
         bloque.setOnDragDetected(event -> {
@@ -135,18 +139,20 @@ public class GameController {
                     Integer row = GridPane.getRowIndex(targetCell);
                     Integer column = GridPane.getColumnIndex(targetCell);
 
-                    if (row != null && column != null && !tablero.getCelda(column, row).tieneBloque() && tablero.getCelda(column, row).getPiso()) {
+                    if (row != null && column != null && !tablero.getCelda(2*column, 2*row).tieneBloque()
+                            && tablero.getCelda(2*column, 2*row).getPiso()) {
                         int originalRow = GridPane.getRowIndex(bloque);
                         int originalCol = GridPane.getColumnIndex(bloque);
 
-                        // Mover el bloque a la nueva celda
+                        // Mover el bloque a la nueva celda (en la UI)
                         GridPane.setRowIndex(bloque, row);
                         GridPane.setColumnIndex(bloque, column);
 
-                        // E intercambio el rectangle en la celda original
+                        // E intercambio el rectangle en la celda original (en la UI)
                         GridPane.setRowIndex(targetCell, originalRow);
                         GridPane.setColumnIndex(targetCell, originalCol);
 
+                        // Mover el bloque a la nueva celda (en el Modelo)
                         Posicion origen = new Posicion(originalCol, originalRow);
                         Posicion destino = new Posicion(column, row);
                         tablero.moverBloque(origen, destino);
@@ -158,7 +164,7 @@ public class GameController {
             event.setDropCompleted(success);
             event.consume();
             if(success){
-                mostrarLaser(grilla);
+                mostrarLaser(canvas);
                 SALIR = tablero.chequearVictoria();
                 return;
             }
@@ -175,13 +181,13 @@ public class GameController {
         return null;
     }
 
-    private void mostrarLaser(GridPane grilla){
+    private void mostrarLaser(Group canvas){
         // Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser
-        var copiaChildren = new ArrayList<>(grilla.getChildren());
+        var copiaChildren = new ArrayList<>(canvas.getChildren());
 
         for (Node child : copiaChildren) {
             if (child instanceof Line && ((Line) child).getStroke() == RED) {
-                grilla.getChildren().remove(child);
+                canvas.getChildren().remove(child);
             }
         }
         for (Laser laser : game.getTableroActual().getLasers()) {
@@ -189,29 +195,25 @@ public class GameController {
             game.getTableroActual().moverLaser(laser);
 
             for(int i = 0; i < laser.getTrayectoria().size()-1; i++){
-                dibujarLaser(grilla, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
+                dibujarLaser(canvas, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
             }
         }
     }
 
-    private void dibujarLaser(GridPane grilla, Posicion fromPos, Posicion toPos){
-        double fromXView = convertirACoordenadaX(fromPos.getCoordX());
-        double fromYView = convertirACoordenadaY(fromPos.getCoordY());
-        double toXView = convertirACoordenadaX(toPos.getCoordX());
-        double toYView = convertirACoordenadaY(toPos.getCoordY());
+    private void dibujarLaser(Group canvas, Posicion fromPos, Posicion toPos){
+        Posicion fromPosView = convertirCoordAView(fromPos);
+        Posicion toPosView = convertirCoordAView(toPos);
 
-        Line laserLine = new Line(fromXView, fromYView, toXView, toYView);
+        Line laserLine = new Line(fromPosView.getCoordX(), fromPosView.getCoordY(),
+                toPosView.getCoordX(), toPosView.getCoordY());
         laserLine.setStrokeWidth(2);
         laserLine.setStroke(Color.RED);
-        grilla.getChildren().add(laserLine);
+        canvas.getChildren().add(laserLine);
     }
 
-    // Convierte las coordenadas del modelo (grilla) a coordenadas de píxeles
-    private double convertirACoordenadaX(int x) {
-        return x * 40 + 40 / 2.0;  // Coordenada X del centro de la celda
-    }
-    private double convertirACoordenadaY(int y) {
-        return y * 40 + 40 / 2.0; // Coordenada Y del centro de la celda
+    // Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
+    private Posicion convertirCoordAView(Posicion pos) {
+        return new Posicion(pos.getCoordX() * CELL_W + CELL_W/2, pos.getCoordY() * CELL_H + CELL_H/2);
     }
 
     public ToggleButton getButtonForLevel(int nivel) {

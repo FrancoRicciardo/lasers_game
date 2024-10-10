@@ -43,9 +43,9 @@ public class Laser {
     public void moverPosicion(){
         // Mueve el laser una posicion
         if(estoyActivo) {
-            Posicion currentPos = currentPosition();
-            currentPos.move(direccion);
-            trayectoria.add(currentPos);
+            Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
+            newPos.move(direccion);
+            trayectoria.add(newPos);
         }
     }
 
@@ -64,25 +64,25 @@ public class Laser {
 
     public void refractarLaser() {
         /* Refracta el laser dependiendo su direccion actual */
-        Posicion currentPos = currentPosition();
+        Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion){
             case NE, SE:
-                if (currentPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
-                    currentPos.setCoordX(currentPos.getCoordX() + 2);
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    newPos.setCoordX(newPos.getCoordX() + 2);
                 else   /* Si coord y es par, "sigo de largo" en y */
-                    currentPos.setCoordY(currentPos.getCoordY() + 2);
+                    newPos.setCoordY(newPos.getCoordY() + 2);
                 break;
             case NW, SW:
-                if (currentPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
-                    currentPos.setCoordX(currentPos.getCoordX() - 2);
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                    newPos.setCoordX(newPos.getCoordX() - 2);
                 else   /* Si coord y es par, "sigo de largo" en y */
-                    currentPos.setCoordY(currentPos.getCoordY() + 2);
+                    newPos.setCoordY(newPos.getCoordY() + 2);
                 break;
         }
 
         /* Avanzo una posicion en esa direccion nueva */
-        currentPos.move(direccion);
-        trayectoria.add(currentPos);
+        newPos.move(direccion);
+        trayectoria.add(newPos);
     }
 
     public void reiniciarTrayectoria(){

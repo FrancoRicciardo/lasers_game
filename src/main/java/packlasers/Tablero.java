@@ -22,10 +22,19 @@ public class Tablero {
     }
 
     public Celda getCelda(int columna, int fila) {
-        if (columna >= 0 && columna < grilla.length && fila >= 0 && fila < grilla[0].length) {
+        if(isOutOfBounds(columna, fila)){
+            return null;
+        } else {
             return grilla[columna][fila];
         }
-        return null;
+    }
+
+    public boolean isOutOfBounds(int x, int y){
+        if (x >= 0 && x < grilla.length && y >= 0 && y < grilla[0].length) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public ArrayList<Laser> getLasers() {
@@ -52,7 +61,7 @@ public class Tablero {
         }
 
         // Inicializo la grilla con el número de filas y el tamaño de la primera línea
-        this.grilla = new Celda[lineas.getFirst().length()][filas];
+        this.grilla = new Celda[(lineas.getFirst().length())*2][filas*2];
 
         // Cargar la primera seccion de bloques y pisos
         cargarBloquesYPisos(lineas.subList(0, filas));
@@ -79,8 +88,18 @@ public class Tablero {
             String linea = lineas.get(row);
             for (int col = 0; col < linea.length(); col++) {
                 char caracter = linea.charAt(col);
-                Posicion posicion = new Posicion(col, row);
-                this.grilla[col][row] = crearCelda(caracter, posicion);
+
+                Posicion pos00 = new Posicion(2*col, 2*row);
+                this.grilla[2*col][2*row] = crearCelda(caracter, pos00);
+
+                Posicion pos10 = new Posicion((2*col)+1, 2*row);
+                this.grilla[(2*col)+1][2*row] = crearCelda(caracter, pos10);
+
+                Posicion pos01 = new Posicion(2*col, (2*row)+1);
+                this.grilla[2*col][(2*row)+1] = crearCelda(caracter, pos01);
+
+                Posicion pos11 = new Posicion((2*col)+1, (2*row)+1);
+                this.grilla[(2*col)+1][(2*row)+1] = crearCelda(caracter, pos11);
             }
         }
     }
@@ -145,14 +164,37 @@ public class Tablero {
 
 
     public void moverBloque(Posicion fromPos, Posicion toPos) {
-        Celda fromCelda = getCelda(fromPos.getCoordX(), fromPos.getCoordY());
-        Celda toCelda = getCelda(toPos.getCoordX(), toPos.getCoordY());
+        Celda fromCelda00 = getCelda(2*fromPos.getCoordX(), 2*fromPos.getCoordY());
+        Celda toCelda00 = getCelda(2*toPos.getCoordX(), 2*toPos.getCoordY());
+
+        Celda fromCelda10 = getCelda((2*fromPos.getCoordX())+1, 2*fromPos.getCoordY());
+        Celda toCelda10 = getCelda((2*toPos.getCoordX())+1, 2*toPos.getCoordY());
+
+        Celda fromCelda01 = getCelda(2*fromPos.getCoordX(), (2*fromPos.getCoordY())+1);
+        Celda toCelda01 = getCelda(2*toPos.getCoordX(), (2*toPos.getCoordY())+1);
+
+        Celda fromCelda11 = getCelda((2*fromPos.getCoordX())+1, (2*fromPos.getCoordY())+1);
+        Celda toCelda11 = getCelda((2*toPos.getCoordX())+1, (2*toPos.getCoordY())+1);
 
         // Verifica si el bloque se puede mover
-        if (fromCelda.tieneBloque() && toCelda.getPiso() && !toCelda.tieneBloque()) {
-            Bloque bloque = fromCelda.getBloque();
-            fromCelda.quitarBloque(); // Quitar bloque de la celda original
-            toCelda.ponerBloque(bloque); // Poner bloque en la nueva celda
+        if (fromCelda00.tieneBloque() && toCelda00.getPiso() && !toCelda00.tieneBloque()) {
+
+            Bloque bloque00 = fromCelda00.getBloque();
+            fromCelda00.quitarBloque(); // Quitar bloque de la celda original en 2x,2y
+            toCelda00.ponerBloque(bloque00); // Poner bloque en la nueva celda
+
+            Bloque bloque10 = fromCelda10.getBloque();
+            fromCelda10.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y
+            toCelda10.ponerBloque(bloque10); // Poner bloque en la nueva celda
+
+            Bloque bloque01 = fromCelda01.getBloque();
+            fromCelda01.quitarBloque(); // Quitar bloque de la celda original en 2x,2y+1
+            toCelda01.ponerBloque(bloque01); // Poner bloque en la nueva celda
+
+            Bloque bloque11 = fromCelda11.getBloque();
+            fromCelda11.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y+1
+            toCelda11.ponerBloque(bloque11); // Poner bloque en la nueva celda
+
         }
     }
 
@@ -168,6 +210,9 @@ public class Tablero {
         /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
         Posicion nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
         nextPos.move(laser.getDireccion());
+
+        // Si la siguiente posicion, esta fuera, no se avanza el laser
+        if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) return;
 
         // Verifica si la celda siguiente existe
         Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());

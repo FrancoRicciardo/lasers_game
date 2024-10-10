@@ -2,8 +2,10 @@ package packlasers.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import packlasers.Game;
@@ -26,7 +28,13 @@ public class Main extends Application {
             return;
         }
 
-        controller.inicializarJuego(grilla);
+        var canvas = (Group) root.lookup("#canvas");
+        if (canvas == null) {
+            System.out.println("No se pudo encontrar el canvas.");
+            return;
+        }
+
+        controller.inicializarJuego(grilla, canvas);
 
         stage.setScene(new Scene(root));
         stage.setTitle("Lasers");
