@@ -93,7 +93,7 @@ public class GameController {
                 System.out.println("Bloque seleccionado: (" + column + " " + row + ")");
 
                 Tablero tablero = game.getTableroActual();
-                // Aquí puedes obtener el bloque en la posición 2x, 2y del Modelo
+                // Obtenenemos el bloque en la posición 2x, 2y del Modelo
                 Celda selectedBlock = tablero.getCelda(2*column, 2*row);
 
                 if (selectedBlock.getBloque() != null && selectedBlock.getBloque().esMovible()) {
@@ -106,16 +106,15 @@ public class GameController {
 
     private void configurarArrastre(Node bloque, GridPane grilla, Group canvas) {
         Tablero tablero = game.getTableroActual();
-        // Evento que detecta el inicio del arrastre
+
         bloque.setOnDragDetected(event -> {
-            // Iniciar arrastre con el bloque seleccionado
             Dragboard dragboard = bloque.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            content.putString("bloque"); // Asignar un identificador al contenido
+            content.putString("bloque");
             dragboard.setContent(content);
-            dragboard.setDragView(bloque.snapshot(null, null)); // Tomar un snapshot del bloque
+            dragboard.setDragView(bloque.snapshot(null, null));
 
-            event.consume(); // Consumir el evento
+            event.consume();
         });
 
         grilla.setOnDragOver(event -> {
@@ -125,13 +124,11 @@ public class GameController {
             event.consume();
         });
 
-        // Evento que se dispara cuando el bloque es soltado
         grilla.setOnDragDropped(event -> {
             Dragboard dragboard = event.getDragboard();
             boolean success = false;
 
             if(dragboard.hasString()) {
-                // Obtener la posición donde se suelta el bloque
                 // Obtener la posición donde se suelta el bloque
                 Node targetCell = getNodeByCoordinates(grilla, event.getX(), event.getY());
                 if (targetCell != null) {

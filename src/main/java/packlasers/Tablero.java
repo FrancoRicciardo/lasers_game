@@ -7,13 +7,10 @@ import java.util.List;
 
 public class Tablero {
     private Celda[][] grilla;
-    private final ArrayList<Laser> lasers;
-    private final ArrayList<Target> targets;
+    private ArrayList<Laser> lasers;
+    private ArrayList<Target> targets;
 
     public Tablero(String filePath) {
-        this.lasers = new ArrayList<>();
-        this.targets = new ArrayList<>();
-
         try {
             loadLevel(filePath);
         } catch (IOException e) {
@@ -65,6 +62,10 @@ public class Tablero {
 
         // Cargar la primera seccion de bloques y pisos
         cargarBloquesYPisos(lineas.subList(0, filas));
+
+        // Inicializo ambos arrays con nada
+        this.targets = new ArrayList<>();
+        this.lasers = new ArrayList<>();
 
         // Cargar la seccion de emisores y objetivos
         if (filas < lineas.size()) {
@@ -162,7 +163,6 @@ public class Tablero {
     private void addTarget(Target target) {
         this.targets.add(target);
     }
-
 
     public void moverBloque(Posicion fromPos, Posicion toPos) {
         Celda fromCelda00 = getCelda(2*fromPos.getCoordX(), 2*fromPos.getCoordY());
