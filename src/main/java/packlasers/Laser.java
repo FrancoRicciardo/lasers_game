@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Laser {
     private Posicion startPosition;
     private Direccion direccion;
-    private ArrayList<Posicion> trayectoria;
+    private final ArrayList<Posicion> trayectoria;
     private boolean estoyActivo;
 
     public Laser(Posicion startPos, Direccion direccion) {
@@ -51,11 +51,32 @@ public class Laser {
 
     public void reflejarLaser() {
         /* Refleja el laser dependiendo su direccion actual y la actualiza */
+        Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         this.direccion = switch (direccion) {
-            case NE -> Direccion.NW;
-            case NW -> Direccion.NE;
-            case SE -> Direccion.SW;
-            case SW -> Direccion.SE;
+            case NE -> {
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado izquierdo"
+                    yield Direccion.NW;
+                else
+                    yield Direccion.SE; // Si coord y es par, el laser "pego de abajo"
+            }
+            case NW -> {
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado derecho"
+                    yield Direccion.NE;
+                else
+                    yield Direccion.SW; // Si coord y es par, el laser "pego de abajo"
+            }
+            case SE -> {
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado izquierdo"
+                    yield Direccion.SW;
+                else
+                    yield Direccion.NE; // Si coord y es par, el laser "pego de arriba"
+            }
+            case SW -> {
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado derecho"
+                    yield Direccion.SE;
+                else
+                    yield Direccion.NW; // Si coord y es par, el laser "pego de abajo"
+            }
         };
 
         /* Avanzo una posicion en esa direccion nueva */
