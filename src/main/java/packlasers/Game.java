@@ -6,11 +6,12 @@ import java.util.List;
 
 public class Game {
     private final List<Tablero> niveles;
-    private Tablero tableroActual = new Tablero("level1.dat");
+    private Tablero tableroActual; //= new Tablero("level1.dat");
 
     public Game() {
         niveles = new ArrayList<>();
         cargarNiveles();
+        tableroActual = niveles.getFirst();
     }
 
     private void cargarNiveles() {
@@ -66,7 +67,7 @@ public class Game {
     public void reiniciarNivel(int nivel){
         try {
             tableroActual.loadLevel(getNivelDat(nivel));
-            niveles.set(nivel -1, tableroActual);
+            niveles.set(nivel-1, tableroActual);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

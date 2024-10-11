@@ -145,7 +145,8 @@ public class Tablero {
                 int col = Integer.parseInt(tokens[1]);
                 int fila = Integer.parseInt(tokens[2]);
                 Direccion direction = Direccion.valueOf(tokens[3]);
-                addLaser(new Laser(col, fila, direction));
+                Posicion pos = new Posicion(col, fila);
+                addLaser(new Laser(pos, direction));
             } else if (tokens[0].equals("G")) {
                 int col = Integer.parseInt(tokens[1]);
                 int fila = Integer.parseInt(tokens[2]);

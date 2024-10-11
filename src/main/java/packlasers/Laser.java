@@ -3,13 +3,13 @@ package packlasers;
 import java.util.ArrayList;
 
 public class Laser {
-    private final Posicion startPosition;
+    private Posicion startPosition;
     private Direccion direccion;
     private ArrayList<Posicion> trayectoria;
     private boolean estoyActivo;
 
-    public Laser(int x, int y, Direccion direccion) {
-        this.startPosition = new Posicion(x, y);
+    public Laser(Posicion startPos, Direccion direccion) {
+        this.startPosition = startPos;
         this.direccion = direccion;
         this.estoyActivo = true;
         this.trayectoria = new ArrayList<>();
@@ -86,8 +86,10 @@ public class Laser {
     }
 
     public void reiniciarTrayectoria(){
+        Posicion startPos = new Posicion(startPosition.getCoordX(), startPosition.getCoordY());
         this.trayectoria.clear();
-        this.trayectoria.add(startPosition);
+        this.startPosition = startPos;
+        this.trayectoria.add(startPos);
     }
 }
 

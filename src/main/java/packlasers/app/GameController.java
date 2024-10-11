@@ -213,7 +213,7 @@ public class GameController {
 
     // Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
     private Posicion convertirCoordAView(Posicion pos) {
-        return new Posicion(pos.getCoordX() * CELL_W + CELL_W/2, pos.getCoordY() * CELL_H + CELL_H/2);
+        return new Posicion(pos.getCoordX() * (CELL_W/2), pos.getCoordY() * (CELL_H/2));
     }
 
     public ToggleButton getButtonForLevel(int nivel) {
