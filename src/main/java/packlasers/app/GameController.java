@@ -3,10 +3,13 @@ package packlasers.app;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -65,20 +68,22 @@ public class GameController {
     private void seleccionarNivel(int nivel) {
         game.reiniciarNivel(nivel);
         game.setTableroActual(game.getNivel(nivel - 1));
+        SALIR = false;
         gameView.cargarNivel(nivel);
 
     }
 
-    public void inicializarJuego(GridPane grilla, Group canvas) {
+    public void inicializarJuego(Parent root) {
         System.out.println("Inicializando juego...");
+        var canvas = (Group) root.lookup("#canvas");
+
         mostrarLaser(canvas);
-        if(SALIR) return;
-        configurarEventosBloques(grilla, canvas);
-        if(SALIR) return;
+        System.out.println("Configurando eventos para bloques...");
+        configurarEventosBloques(root);
     }
 
-    private void configurarEventosBloques(GridPane grilla, Group canvas) {
-        System.out.println("Configurando eventos para bloques...");
+    private void configurarEventosBloques(Parent root) {
+        if(SALIR) return;
         grilla.setOnMousePressed(event -> {
             if(SALIR) {
                 event.consume();
@@ -97,17 +102,25 @@ public class GameController {
                 Celda selectedBlock = tablero.getCelda(2*column, 2*row);
 
                 if (selectedBlock.getBloque() != null && selectedBlock.getBloque().esMovible()) {
-                    configurarArrastre(clickedNode, grilla, canvas);
+                    configurarArrastre(clickedNode, root);
                 }
             }
             event.consume();
         });
     }
 
-    private void configurarArrastre(Node bloque, GridPane grilla, Group canvas) {
+    private void configurarArrastre(Node bloque, Parent root) {
         Tablero tablero = game.getTableroActual();
+        GridPane grilla = (GridPane) root.lookup("#grilla");
+        var canvas = (Group) root.lookup("#canvas");
+        HBox hbox = (HBox) root.lookup("#rootHBox");
+
 
         bloque.setOnDragDetected(event -> {
+            if(SALIR){
+                event.consume();
+                return;
+            }
             Dragboard dragboard = bloque.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.putString("bloque");
@@ -118,7 +131,7 @@ public class GameController {
         });
 
         grilla.setOnDragOver(event -> {
-            if (event.getGestureSource() != grilla && event.getDragboard().hasString()) {
+            if (event.getGestureSource() != grilla && event.getDragboard().hasString() && !SALIR) {
                 event.acceptTransferModes(TransferMode.MOVE);
             }
             event.consume();
@@ -162,8 +175,17 @@ public class GameController {
             if(success){
                 mostrarLaser(canvas);
                 SALIR = tablero.chequearVictoria();
-                return;
+                if(SALIR){
+                    TextArea texto = new TextArea("Felicitaciones!\nNivel completado :D\nVaya al siguiente!");
+                    texto.setPrefHeight(60);
+                    texto.setMaxHeight(60);
+                    texto.setPrefWidth(140);
+                    texto.setMaxWidth(140);
+                    texto.setMouseTransparent(true);
+                    hbox.getChildren().add(texto);
+                }
             }
+            return;
         });
     }
 

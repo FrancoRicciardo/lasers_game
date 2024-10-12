@@ -29,20 +29,20 @@ public class Posicion {
     public void move(Direccion direction) {
         switch (direction) {
             case NE:
-                this.x++;
-                this.y--;
+                incX();
+                decY();
                 break;
             case NW:
-                this.x--;
-                this.y--;
+                decX();
+                decY();
                 break;
             case SE:
-                this.x++;
-                this.y++;
+                incX();
+                incY();
                 break;
             case SW:
-                this.x--;
-                this.y++;
+                decX();
+                incY();
                 break;
         }
     }
@@ -53,5 +53,21 @@ public class Posicion {
         if (obj == null || getClass() != obj.getClass()) return false;
         Posicion position = (Posicion) obj;
         return (x == position.getCoordX() && y == position.getCoordY());
+    }
+
+    public void incX() {
+        this.x++;
+    }
+
+    public void decX() {
+        this.x--;
+    }
+
+    public void incY() {
+        this.y++;
+    }
+
+    public void decY() {
+        this.y--;
     }
 }

@@ -66,8 +66,7 @@ public class Game {
 
     public void reiniciarNivel(int nivel){
         try {
-            tableroActual.loadLevel(getNivelDat(nivel));
-            niveles.set(nivel-1, tableroActual);
+            niveles.get(nivel-1).loadLevel(getNivelDat(nivel));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

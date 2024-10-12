@@ -41,19 +41,7 @@ public class GameView {
                     controller.getToggleGroup().selectToggle(selectedButton);
                 }
 
-                GridPane grilla = (GridPane) root.lookup("#grilla");
-                if (grilla == null) {
-                    System.out.println("No se pudo encontrar la grilla.");
-                    return;
-                }
-
-                var canvas = (Group) root.lookup("#canvas");
-                if (canvas == null) {
-                    System.out.println("No se pudo encontrar el canvas.");
-                    return;
-                }
-
-                controller.inicializarJuego(grilla, canvas);
+                controller.inicializarJuego(root);
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();

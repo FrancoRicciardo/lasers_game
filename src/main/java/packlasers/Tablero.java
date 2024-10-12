@@ -213,23 +213,23 @@ public class Tablero {
         nextPos.move(laser.getDireccion());
 
         // Si la siguiente posicion, esta fuera, no se avanza el laser
-        if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) return;
+        if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
 
         // Verifica si la celda siguiente existe
         Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
-        if (nextCelda == null) return;
+        if (nextCelda == null) laser.fuiAbsorbido();
 
         // Mientras el láser esté activo y haya piso en la siguiente posición
-        while (laser.isActive() && nextCelda.getPiso()) {
+        while (laser.isActive()) {
 
-            // Actualiza la posición del láser
-            laser.moverPosicion();
-
-            Bloque block = getCelda(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY()).getBloque();
+            Bloque block = nextCelda.getBloque();
             if (block != null) {
                 // Interactuar con el bloque si existe bloque
                 block.interactuarLaser(laser);
             }
+            // Actualiza la posición del láser
+            laser.moverPosicion();
+
 
             // Verificar si el láser ha alcanzado un objetivo
             for (Target target : targets) {
@@ -246,7 +246,7 @@ public class Tablero {
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
 
             // Salir si la celda siguiente es nula (fuera de los límites)
-            if (nextCelda == null) return;
+            if (nextCelda == null) laser.fuiAbsorbido();
         }
     }
 }
