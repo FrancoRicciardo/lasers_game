@@ -27,7 +27,11 @@ class BloqueDeCristal implements Bloque {
 class BloqueDeVidrio implements Bloque {
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
-       laser.interactuarConBloqueVidrio(tablero);
+
+        laser.puedoContinuar();
+
+        // Difracta el láser en dos direcciones
+        laser.difractarLaser(tablero);
     }
 
     @Override
@@ -38,7 +42,7 @@ class BloqueDeVidrio implements Bloque {
 
 class BloqueOpacoMovil implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser,  Tablero tablero) {
+    public void interactuarLaser(Laser laser, Tablero tablero) {
         laser.fuiAbsorbido();
     }
 
@@ -53,7 +57,10 @@ class BloqueOpacoMovil implements Bloque {
 
 class BloqueOpacoFijo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser,  Tablero tablero) {
+    public void interactuarLaser(Laser laser, Tablero tablero) {
+
+        laser.moverPosicion();
+        // Absorbo el laser para que no pueda seguir
         laser.fuiAbsorbido();
     }
 
@@ -65,7 +72,7 @@ class BloqueOpacoFijo implements Bloque {
 
 class BloqueEspejo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser,  Tablero tablero) {
+    public void interactuarLaser(Laser laser, Tablero tablero) {
 
         laser.puedoContinuar();
         // Refleja el láser como un espejo

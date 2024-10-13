@@ -39,7 +39,7 @@ public class Laser {
     }
 
     public Posicion currentPosition(){
-        return this.trayectoria.get(trayectoria.size() - 1);
+        return this.trayectoria.getLast();
     }
 
     public void moverPosicion(){
@@ -83,7 +83,7 @@ public class Laser {
 
         // Avanzo una posicion en esa direccion nueva
         moverPosicion();
-    } */
+    }*/
 
     public void reflejarLaser() {
         // Refracta el laser dependiendo su direccion actual
@@ -147,10 +147,10 @@ public class Laser {
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion){
             case NE, SE:
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
-                    newPos.setCoordX(newPos.getCoordX() + 2);
-                else   /* Si coord y es par, "sigo de largo" en y */
-                    newPos.setCoordY(newPos.getCoordY() + 2);
+                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en y
+                    newPos.setCoordX(newPos.getCoordY() + 2);
+                else   /* Si coord y es par, "sigo de largo" en x */
+                    newPos.setCoordY(newPos.getCoordX() + 2);
                 break;
             case NW, SW:
                 if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
@@ -163,10 +163,61 @@ public class Laser {
         // Agrego esa posicion a la trayectoria
         trayectoria.add(newPos);
 
-        /* Y avanzo normalmente una posicion en esa direccion */
+        /* Y avanzo normalmente una posicion en esa direccion
         Posicion newPos2 = new Posicion (newPos.getCoordX(), newPos.getCoordY());
         newPos2.move(direccion);
-        trayectoria.add(newPos2);
+        trayectoria.add(newPos2);*/
+    }
+
+    public void difractarLaser (Tablero tablero){
+        // Difracta el láser en dos direcciones:
+        Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
+
+        // 1) Refleja el láser creando un nuevo rayo reflejado en la dirección correspondiente
+        Direccion direccionReflejada;
+        switch (direccion) {
+            case NE:
+                if (newPos.getCoordX() % 2 == 0) { // Si coord x es par, el laser "pego de abajo"
+                    direccionReflejada = Direccion.SE;
+                }
+                else {
+                    direccionReflejada = Direccion.NW; // Si coord y es par, el laser "pego del costado izquierdo"
+                }
+                break;
+            case NW:
+                if (newPos.getCoordX() % 2 == 0) { // Si coord x es par, el laser "pego del costado derecho"
+                    direccionReflejada = Direccion.NE;
+                }
+                else {
+                    direccionReflejada = Direccion.SW; // Si coord y es par, el laser "pego de abajo"
+                }
+                break;
+            case SE:
+                if (newPos.getCoordX() % 2 == 0) { // Si coord x es par, el laser "pego de arriba"
+                    direccionReflejada = Direccion.NE;
+                }
+                else {
+                    direccionReflejada = Direccion.SW; // Si coord y es par, el laser "pego del costado izquierdo"
+                }
+                break;
+            case SW:
+                if (newPos.getCoordX() % 2 == 0) { // Si coord x es par, el laser "pego del costado derecho"
+                    direccionReflejada = Direccion.SE;
+                }
+                else {
+                    direccionReflejada = Direccion.NW; // Si coord y es par, el laser "pego de arriba"
+                }
+                break;
+            default:
+                return;
+        }
+        // Crea un nuevo láser reflejado y lo agregamos a la colección de láseres del tablero
+        Laser laserReflejado = new Laser(newPos, direccionReflejada);
+        tablero.addLaser(laserReflejado);
+
+        // 2) Y deja correr normalmente el "laser original"
+        moverPosicion();
+
     }
 
     public void reiniciarTrayectoria(){
@@ -177,39 +228,5 @@ public class Laser {
         this.trayectoria.add(startPos);
         this.direccion = startDirec;
     }
-
-    public void interactuarConBloqueVidrio(Tablero tablero) {
-        // Crea una copia de la posición actual del láser
-        Posicion currentPos = currentPosition();
-
-        // Refleja el láser creando un nuevo rayo reflejado en la dirección opuesta
-        Direccion direccionReflejada;
-        switch (direccion) {
-            case NE:
-                direccionReflejada = Direccion.NW; // Reflexión hacia NW
-                break;
-            case NW:
-                direccionReflejada = Direccion.NE; // Reflexión hacia NE
-                break;
-            case SE:
-                direccionReflejada = Direccion.SW; // Reflexión hacia SW
-                break;
-            case SW:
-                direccionReflejada = Direccion.SE; // Reflexión hacia SE
-                break;
-            default:
-                return;
-        }
-
-        // Crea el láser reflejado
-        Laser laserReflejado = new Laser(new Posicion(currentPos.getCoordX(), currentPos.getCoordY()), direccionReflejada);
-        laserReflejado.reflejarLaser(); // Mueve el láser reflejado a su nueva posición
-
-        // Agrega el láser reflejado a la colección de láseres del tablero
-        tablero.agregarLaser(laserReflejado);
-
-        moverPosicion(); // Mueve el láser original
-    }
-
 }
 

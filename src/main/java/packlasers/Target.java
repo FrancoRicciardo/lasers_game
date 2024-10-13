@@ -17,7 +17,7 @@ public class Target {
         this.meAlcanzaron = true;
     }
 
-    public void noFuiAlcanzado(){
+    public void reiniciarTarget(){
         this.meAlcanzaron = false;
     }
 

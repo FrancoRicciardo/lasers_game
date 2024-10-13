@@ -208,6 +208,11 @@ public class GameController {
                 canvas.getChildren().remove(child);
             }
         }
+
+        for(Target target : game.getTableroActual().getTarget()){
+            target.reiniciarTarget();
+        }
+
         for (Laser laser : game.getTableroActual().getLasers()) {
             laser.reiniciarTrayectoria();
             game.getTableroActual().moverLaser(laser);
