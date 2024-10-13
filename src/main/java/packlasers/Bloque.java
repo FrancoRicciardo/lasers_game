@@ -2,7 +2,7 @@ package packlasers;
 
 public interface Bloque {
     // Metodo que define cómo interactúa el bloque con un láser
-    void interactuarLaser(Laser laser);
+    void interactuarLaser(Laser laser, Tablero tablero);
 
     // Metodo que indica si el bloque es móvil o no
     boolean esMovible();
@@ -10,7 +10,7 @@ public interface Bloque {
 
 class BloqueDeCristal implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser) {
+    public void interactuarLaser(Laser laser, Tablero tablero) {
 
         laser.puedoContinuar();
         // Refracta el laser, continuando en linea recta por el extremo opuesto
@@ -26,15 +26,8 @@ class BloqueDeCristal implements Bloque {
 
 class BloqueDeVidrio implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser) {
-        // Difracta el láser en dos direcciones:
-
-        laser.puedoContinuar();
-        // 1) Refleja el láser como un espejo
-        laser.reflejarLaser();
-
-        // 2) Deja que el láser principal siga en la misma dirección
-        laser.moverPosicion();
+    public void interactuarLaser(Laser laser, Tablero tablero) {
+       laser.interactuarConBloqueVidrio(tablero);
     }
 
     @Override
@@ -45,7 +38,7 @@ class BloqueDeVidrio implements Bloque {
 
 class BloqueOpacoMovil implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser) {
+    public void interactuarLaser(Laser laser,  Tablero tablero) {
         laser.fuiAbsorbido();
     }
 
@@ -60,7 +53,7 @@ class BloqueOpacoMovil implements Bloque {
 
 class BloqueOpacoFijo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser) {
+    public void interactuarLaser(Laser laser,  Tablero tablero) {
         laser.fuiAbsorbido();
     }
 
@@ -72,7 +65,7 @@ class BloqueOpacoFijo implements Bloque {
 
 class BloqueEspejo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser) {
+    public void interactuarLaser(Laser laser,  Tablero tablero) {
 
         laser.puedoContinuar();
         // Refleja el láser como un espejo

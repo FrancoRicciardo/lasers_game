@@ -39,7 +39,7 @@ public class Laser {
     }
 
     public Posicion currentPosition(){
-        return this.trayectoria.getLast();
+        return this.trayectoria.get(trayectoria.size() - 1);
     }
 
     public void moverPosicion(){
@@ -177,5 +177,39 @@ public class Laser {
         this.trayectoria.add(startPos);
         this.direccion = startDirec;
     }
+
+    public void interactuarConBloqueVidrio(Tablero tablero) {
+        // Crea una copia de la posición actual del láser
+        Posicion currentPos = currentPosition();
+
+        // Refleja el láser creando un nuevo rayo reflejado en la dirección opuesta
+        Direccion direccionReflejada;
+        switch (direccion) {
+            case NE:
+                direccionReflejada = Direccion.NW; // Reflexión hacia NW
+                break;
+            case NW:
+                direccionReflejada = Direccion.NE; // Reflexión hacia NE
+                break;
+            case SE:
+                direccionReflejada = Direccion.SW; // Reflexión hacia SW
+                break;
+            case SW:
+                direccionReflejada = Direccion.SE; // Reflexión hacia SE
+                break;
+            default:
+                return;
+        }
+
+        // Crea el láser reflejado
+        Laser laserReflejado = new Laser(new Posicion(currentPos.getCoordX(), currentPos.getCoordY()), direccionReflejada);
+        laserReflejado.reflejarLaser(); // Mueve el láser reflejado a su nueva posición
+
+        // Agrega el láser reflejado a la colección de láseres del tablero
+        tablero.agregarLaser(laserReflejado);
+
+        moverPosicion(); // Mueve el láser original
+    }
+
 }
 

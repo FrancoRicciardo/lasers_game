@@ -163,7 +163,6 @@ public class Tablero {
     private void addTarget(Target target) {
         this.targets.add(target);
     }
-
     public void moverBloque(Posicion fromPos, Posicion toPos) {
         Celda fromCelda00 = getCelda(2*fromPos.getCoordX(), 2*fromPos.getCoordY());
         Celda toCelda00 = getCelda(2*toPos.getCoordX(), 2*toPos.getCoordY());
@@ -177,27 +176,32 @@ public class Tablero {
         Celda fromCelda11 = getCelda((2*fromPos.getCoordX())+1, (2*fromPos.getCoordY())+1);
         Celda toCelda11 = getCelda((2*toPos.getCoordX())+1, (2*toPos.getCoordY())+1);
 
-        // Verifica si el bloque se puede mover
-        if (fromCelda00.tieneBloque() && toCelda00.getPiso() && !toCelda00.tieneBloque()) {
+        // Verifica si todas las celdas de origen tienen un bloque y las de destino están vacías
+        if (fromCelda00.tieneBloque() && fromCelda10.tieneBloque() && fromCelda01.tieneBloque() && fromCelda11.tieneBloque()
+                && toCelda00.getPiso() && !toCelda00.tieneBloque()
+                && toCelda10.getPiso() && !toCelda10.tieneBloque()
+                && toCelda01.getPiso() && !toCelda01.tieneBloque()
+                && toCelda11.getPiso() && !toCelda11.tieneBloque()) {
 
+            // Mover el bloque en las cuatro celdas
             Bloque bloque00 = fromCelda00.getBloque();
-            fromCelda00.quitarBloque(); // Quitar bloque de la celda original en 2x,2y
-            toCelda00.ponerBloque(bloque00); // Poner bloque en la nueva celda
+            fromCelda00.quitarBloque();
+            toCelda00.ponerBloque(bloque00);
 
             Bloque bloque10 = fromCelda10.getBloque();
-            fromCelda10.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y
-            toCelda10.ponerBloque(bloque10); // Poner bloque en la nueva celda
+            fromCelda10.quitarBloque();
+            toCelda10.ponerBloque(bloque10);
 
             Bloque bloque01 = fromCelda01.getBloque();
-            fromCelda01.quitarBloque(); // Quitar bloque de la celda original en 2x,2y+1
-            toCelda01.ponerBloque(bloque01); // Poner bloque en la nueva celda
+            fromCelda01.quitarBloque();
+            toCelda01.ponerBloque(bloque01);
 
             Bloque bloque11 = fromCelda11.getBloque();
-            fromCelda11.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y+1
-            toCelda11.ponerBloque(bloque11); // Poner bloque en la nueva celda
-
+            fromCelda11.quitarBloque();
+            toCelda11.ponerBloque(bloque11);
         }
     }
+
 
     public boolean chequearVictoria() {
         for (Target target : targets) {
@@ -213,7 +217,7 @@ public class Tablero {
         nextPos.move(laser.getDireccion());
 
         // Si la siguiente posicion, esta fuera, no se avanza el laser
-        if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
+        if (isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
 
         // Verifica si la celda siguiente existe
         Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
@@ -225,11 +229,10 @@ public class Tablero {
             Bloque block = nextCelda.getBloque();
             if (block != null) {
                 // Interactuar con el bloque si existe bloque
-                block.interactuarLaser(laser);
+                block.interactuarLaser(laser, this);
             }
             // Actualiza la posición del láser
             laser.moverPosicion();
-
 
             // Verificar si el láser ha alcanzado un objetivo
             for (Target target : targets) {
@@ -248,5 +251,9 @@ public class Tablero {
             // Salir si la celda siguiente es nula (fuera de los límites)
             if (nextCelda == null) laser.fuiAbsorbido();
         }
+    }
+
+    public void agregarLaser(Laser laser){
+        lasers.add(laser);
     }
 }
