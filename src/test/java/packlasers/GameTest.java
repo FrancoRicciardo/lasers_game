@@ -133,9 +133,9 @@ class GameTest {
         assertEquals(game.getTableroActual(), tablero);
 
         // Verificaciones de q los Targets sean bien cargados
-        Target target1 = game.getTableroActual().getTarget().getFirst();
-        Target target2 = game.getTableroActual().getTarget().get(1);
-        Target target3 = game.getTableroActual().getTarget().get(2);
+        Target target1 = game.getTableroActual().getTargets().getFirst();
+        Target target2 = game.getTableroActual().getTargets().get(1);
+        Target target3 = game.getTableroActual().getTargets().get(2);
         // Que ningun target de este nivel sea null
         assertNotNull(target1);
         assertNotNull(target2);
@@ -392,7 +392,7 @@ class GameTest {
         assertEquals(game.getTableroActual(), tablero);
 
         // Verificaciones de q los Targets sean bien cargados
-        Target target1 = game.getTableroActual().getTarget().getFirst();
+        Target target1 = game.getTableroActual().getTargets().getFirst();
         // Que target de este nivel sea null
         assertNotNull(target1);
 
@@ -509,11 +509,11 @@ class GameTest {
         assertEquals(game.getTableroActual(), tablero);
 
         // Verificaciones de q los Targets sean bien cargados
-        Target target1 = game.getTableroActual().getTarget().getFirst();
-        Target target2 = game.getTableroActual().getTarget().get(1);
-        Target target3 = game.getTableroActual().getTarget().get(2);
-        Target target4 = game.getTableroActual().getTarget().get(3);
-        Target target5 = game.getTableroActual().getTarget().get(4);
+        Target target1 = game.getTableroActual().getTargets().getFirst();
+        Target target2 = game.getTableroActual().getTargets().get(1);
+        Target target3 = game.getTableroActual().getTargets().get(2);
+        Target target4 = game.getTableroActual().getTargets().get(3);
+        Target target5 = game.getTableroActual().getTargets().get(4);
         // Que ningun target de este nivel sea null
         assertNotNull(target1);
         assertNotNull(target2);
@@ -729,7 +729,10 @@ class GameTest {
 
     }
 
-    // No hicieron falta tests para el level 5, nos paso a la perfeccion :D
+    // No hicieron falta tests para el level 5, el bloque de cristal
+    // funciona correctamente y el nivel se puede jugar a la perfeccion :D
+    // PD: Soy Fran :D , estuve a nada de hacerlo pero era perder tiempo testeando algo
+    // que ya funcionaba y tenia que ponerme al dia con las clases teoricas je
 
     @Test
     void checkLevel6(){
@@ -743,10 +746,10 @@ class GameTest {
         assertEquals(game.getTableroActual(), tablero);
 
         // Verificaciones de q los Targets sean bien cargados
-        Target target1 = game.getTableroActual().getTarget().getFirst();
-        Target target2 = game.getTableroActual().getTarget().get(1);
-        Target target3 = game.getTableroActual().getTarget().get(2);
-        Target target4 = game.getTableroActual().getTarget().get(3);
+        Target target1 = game.getTableroActual().getTargets().getFirst();
+        Target target2 = game.getTableroActual().getTargets().get(1);
+        Target target3 = game.getTableroActual().getTargets().get(2);
+        Target target4 = game.getTableroActual().getTargets().get(3);
         // Que ningun target de este nivel sea null
         assertNotNull(target1);
         assertNotNull(target2);

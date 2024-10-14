@@ -104,7 +104,7 @@ class TableroTest {
         assertEquals(1, laser.currentPosition().getCoordY());
         assertEquals(Direccion.SE, laser.getDireccion());
 
-        Target target = tablero.getTarget().getFirst();
+        Target target = tablero.getTargets().getFirst();
         assertNotNull(target);
         assertEquals(8, target.getPosicion().getCoordX());
         assertEquals(9, target.getPosicion().getCoordY());

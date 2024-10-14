@@ -26,19 +26,11 @@ public class Tablero {
         }
     }
 
-    public boolean isOutOfBounds(int x, int y){
-        if (x >= 0 && x < grilla.length && y >= 0 && y < grilla[0].length) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
     public ArrayList<Laser> getLasers() {
         return lasers;
     }
 
-    public ArrayList<Target> getTarget() {
+    public ArrayList<Target> getTargets() {
         return targets;
     }
 
@@ -270,6 +262,14 @@ public class Tablero {
 
             // Salir si la celda siguiente es nula (fuera de los límites)
             if (nextCelda == null) laser.fuiAbsorbido();
+        }
+    }
+
+    public boolean isOutOfBounds(int x, int y){
+        if (x >= 0 && x < grilla.length && y >= 0 && y < grilla[0].length) {
+            return false;
+        } else {
+            return true;
         }
     }
 
