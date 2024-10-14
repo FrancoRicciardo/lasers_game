@@ -10,6 +10,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import static javafx.scene.paint.Color.RED;
 import javafx.scene.shape.Line;
@@ -202,14 +203,14 @@ public class GameController {
     }
 
     private void mostrarLaser(Parent root){
-        var canvas = (Group) root.lookup("#canvas");
+        var pane = (Pane) root.lookup("#pane");
         HBox hbox = (HBox) root.lookup("#rootHBox");
         // Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser
-        var copiaChildren = new ArrayList<>(canvas.getChildren());
+        var copiaChildren = new ArrayList<>(pane.getChildren());
 
         for (Node child : copiaChildren) {
             if (child instanceof Line && ((Line) child).getStroke() == RED) {
-                canvas.getChildren().remove(child);
+                pane.getChildren().remove(child);
             }
         }
 
@@ -222,7 +223,7 @@ public class GameController {
             game.getTableroActual().moverLaser(laser);
 
             for(int i = 0; i < laser.getTrayectoria().size()-1; i++){
-                dibujarLaser(canvas, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
+                dibujarLaser(pane, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
             }
 
             // Con esto hago que en el lvl4, "se tenga en cuenta" el laser creado por el Bloque de Vidrio
@@ -232,7 +233,7 @@ public class GameController {
                 game.getTableroActual().moverLaser(laserReflejado);
 
                 for(int i = 0; i < laserReflejado.getTrayectoria().size()-1; i++){
-                    dibujarLaser(canvas, laserReflejado.getTrayectoria().get(i), laserReflejado.getTrayectoria().get(i+1));
+                    dibujarLaser(pane, laserReflejado.getTrayectoria().get(i), laserReflejado.getTrayectoria().get(i+1));
                 }
                 SALIR = game.getTableroActual().chequearVictoria();
                 if(SALIR){
@@ -248,7 +249,7 @@ public class GameController {
         }
     }
 
-    private void dibujarLaser(Group canvas, Posicion fromPos, Posicion toPos){
+    private void dibujarLaser(Pane pane, Posicion fromPos, Posicion toPos){
         Posicion fromPosView = convertirCoordAView(fromPos);
         Posicion toPosView = convertirCoordAView(toPos);
 
@@ -256,7 +257,7 @@ public class GameController {
                 toPosView.getCoordX(), toPosView.getCoordY());
         laserLine.setStrokeWidth(2);
         laserLine.setStroke(Color.RED);
-        canvas.getChildren().add(laserLine);
+        pane.getChildren().add(laserLine);
     }
 
     // Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)

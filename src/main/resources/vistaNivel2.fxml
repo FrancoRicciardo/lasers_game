@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
@@ -83,7 +83,7 @@
                   </Circle>
                </children>
             </GridPane>
-            <Group fx:id="canvas" mouseTransparent="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+            <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="200.0" prefWidth="160.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
          </children>
       </AnchorPane>
    </children>
