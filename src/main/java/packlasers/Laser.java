@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Laser {
     private Posicion startPosition;
-    private Direccion startDirec;
+    private final Direccion startDirec;
     private Direccion direccion;
     private final ArrayList<Posicion> trayectoria;
     private boolean estoyActivo;
@@ -42,6 +42,14 @@ public class Laser {
         return this.trayectoria.getLast();
     }
 
+    public Posicion getStartPosition(){
+        return startPosition;
+    }
+
+    public Direccion getStartDirection(){
+        return startDirec;
+    }
+
     public void moverPosicion(){
         // Mueve el laser una posicion
         if(estoyActivo) {
@@ -50,40 +58,6 @@ public class Laser {
             trayectoria.add(newPos);
         }
     }
-
-    /*public void reflejarLaser() {
-        // Refleja el laser dependiendo su direccion actual y la actualiza
-        Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
-        this.direccion = switch (direccion) {
-            case NE -> {
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado izquierdo"
-                    yield Direccion.NW;
-                else
-                    yield Direccion.SE; // Si coord y es par, el laser "pego de abajo"
-            }
-            case NW -> {
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado derecho"
-                    yield Direccion.NE;
-                else
-                    yield Direccion.SW; // Si coord y es par, el laser "pego de abajo"
-            }
-            case SE -> {
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado izquierdo"
-                    yield Direccion.SW;
-                else
-                    yield Direccion.NE; // Si coord y es par, el laser "pego de arriba"
-            }
-            case SW -> {
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, el laser "pego del costado derecho"
-                    yield Direccion.SE;
-                else
-                    yield Direccion.NW; // Si coord y es par, el laser "pego de abajo"
-            }
-        };
-
-        // Avanzo una posicion en esa direccion nueva
-        moverPosicion();
-    }*/
 
     public void reflejarLaser() {
         // Refracta el laser dependiendo su direccion actual
@@ -132,14 +106,6 @@ public class Laser {
         }
         // Agrego esa posicion a la trayectoria
         trayectoria.add(newPos);
-
-        // y luego avanzo una posicion en esa direccion nueva
-        //moverPosicion();
-
-        // Avanzo una posicion en esa direccion nueva
-        //Posicion newPos2 = new Posicion(newPos.getCoordX(), newPos.getCoordY());
-        //newPos2.move(direccion);
-        //trayectoria.add(newPos2);
     }
 
     public void refractarLaser() {
@@ -147,26 +113,32 @@ public class Laser {
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion){
             case NE, SE:
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en y
-                    newPos.setCoordX(newPos.getCoordY() + 2);
-                else   /* Si coord y es par, "sigo de largo" en x */
-                    newPos.setCoordY(newPos.getCoordX() + 2);
+                if (newPos.getCoordX() % 2 == 0) {
+                    // Si la coordenada x es par, el láser sigue avanzando en y
+                    newPos.setCoordY(newPos.getCoordY() + 2);
+                } else {
+                    // Si la coordenada x es impar, el láser sigue avanzando en x
+                    newPos.setCoordX(newPos.getCoordX() + 2);
+                }
                 break;
             case NW, SW:
-                if (newPos.getCoordX() % 2 == 0) // Si coord x es par, "sigo de largo" en x
+                if (newPos.getCoordX() % 2 == 0) {
+                    // Si la coordenada x es par, el láser sigue avanzando en x
                     newPos.setCoordX(newPos.getCoordX() - 2);
-                else   /* Si coord y es par, "sigo de largo" en y */
+                } else {
+                    // Si la coordenada x es impar, el láser sigue avanzando en y
                     newPos.setCoordY(newPos.getCoordY() + 2);
+                }
                 break;
         }
 
         // Agrego esa posicion a la trayectoria
         trayectoria.add(newPos);
 
-        /* Y avanzo normalmente una posicion en esa direccion
+        // Y avanzo normalmente una posicion en esa direccion
         Posicion newPos2 = new Posicion (newPos.getCoordX(), newPos.getCoordY());
         newPos2.move(direccion);
-        trayectoria.add(newPos2);*/
+        trayectoria.add(newPos2);
     }
 
     public void difractarLaser (Tablero tablero){

@@ -51,8 +51,6 @@ class BloqueOpacoMovil implements Bloque {
         return true; // Es movible
     }
 
-
-
 }
 
 class BloqueOpacoFijo implements Bloque {

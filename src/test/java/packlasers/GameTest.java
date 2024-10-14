@@ -1,7 +1,6 @@
 package packlasers;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -705,8 +704,7 @@ class GameTest {
         // TODA LA TRAYECTORIA DE ESTE LASER DEBERIA SER LA MISMA
         // CON LA SALVEDAD DE QUE SE TENDRIA QUE HABER CREADO UN LASER NUEVO!!
 
-        assertEquals(2, tablero.getLasers().size()); // <= TENGO 3 LASERES? WAT
-
+        assertEquals(2, tablero.getLasers().size());
         Laser laser2 = game.getTableroActual().getLasers().get(1);
         // El laser NO es null
         assertNotNull(laser2);
@@ -719,13 +717,10 @@ class GameTest {
 
         // Una vez verificada la generacion del nuevo laser, lo movemos
         tablero.moverLaser(laser2);
-
-        // Obtengo sus trayectorias
+        // Obtengo su trayectoria
         var trayectoria2 = laser2.getTrayectoria();
 
-        // COMENCEMOS TESTEANDO LA TRAYECTORIA DEL 1ER LASER PARA IR ORDENADOS: TODO
-
-        // El laser tiene que haber pasado por la pos (6,7) <= PASO POR TARGET (6,7)
+        // El laser "nuevo" tiene que haber pasado por la pos (6,7) <= PASO POR TARGET (6,7)
         assertEquals(6, trayectoria2.get(1).getCoordX());
         assertEquals(7, trayectoria2.get(1).getCoordY());
 
@@ -733,6 +728,8 @@ class GameTest {
         assertTrue(tablero.chequearVictoria());
 
     }
+
+    // No hicieron falta tests para el level 5, nos paso a la perfeccion :D
 
     @Test
     void checkLevel6(){

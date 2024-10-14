@@ -30,12 +30,12 @@ public class GameView {
                 FXMLLoader loader = new FXMLLoader(location);
                 Parent root = loader.load();
 
-                // Establecer el controlador del nivel
+                // Con esto establecemos el controller del nivel
                 GameController controller = loader.getController();
                 controller.setGame(game);
                 controller.setGameView(this); // Establece gameView
 
-                // Seleccionar el botón correspondiente al nivel actual
+                // Con esto Seleccionamos el botón correspondiente al nivel actual
                 ToggleButton selectedButton = controller.getButtonForLevel(nivel);
                 if (selectedButton != null) {
                     controller.getToggleGroup().selectToggle(selectedButton);

@@ -1,10 +1,10 @@
 package packlasers;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class LaserTest {
+
     @Test
     void recorridoLaser() {
         Tablero tablero = new Tablero("level1.dat");

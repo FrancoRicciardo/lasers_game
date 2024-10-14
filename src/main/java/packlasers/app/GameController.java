@@ -11,13 +11,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import static javafx.scene.paint.Color.RED;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import packlasers.*;
 
 import java.util.ArrayList;
-
-import static javafx.scene.paint.Color.RED;
 
 public class GameController {
     private GameView gameView;
@@ -26,6 +25,7 @@ public class GameController {
     public static boolean SALIR = false;
     public static int CELL_W = 40;
     public static int CELL_H = 40;
+    public static int NIVEL_ACTUAL = 1;
 
     @FXML
     private ToggleButton buttonLevel1, buttonLevel2,
@@ -69,15 +69,14 @@ public class GameController {
         game.reiniciarNivel(nivel);
         game.setTableroActual(game.getNivel(nivel - 1));
         SALIR = false;
+        NIVEL_ACTUAL = nivel;
         gameView.cargarNivel(nivel);
-
     }
 
     public void inicializarJuego(Parent root) {
         System.out.println("Inicializando juego...");
-        var canvas = (Group) root.lookup("#canvas");
-
-        mostrarLaser(canvas);
+        System.out.println("Dibujando laseres...");
+        mostrarLaser(root);
         System.out.println("Configurando eventos para bloques...");
         configurarEventosBloques(root);
     }
@@ -96,7 +95,6 @@ public class GameController {
                 int column = GridPane.getColumnIndex(clickedNode);
 
                 System.out.println("Bloque seleccionado: (" + column + " " + row + ")");
-
                 Tablero tablero = game.getTableroActual();
                 // Obtenenemos el bloque en la posición 2x, 2y del Modelo
                 Celda selectedBlock = tablero.getCelda(2*column, 2*row);
@@ -112,9 +110,7 @@ public class GameController {
     private void configurarArrastre(Node bloque, Parent root) {
         Tablero tablero = game.getTableroActual();
         GridPane grilla = (GridPane) root.lookup("#grilla");
-        var canvas = (Group) root.lookup("#canvas");
         HBox hbox = (HBox) root.lookup("#rootHBox");
-
 
         bloque.setOnDragDetected(event -> {
             if(SALIR){
@@ -142,7 +138,7 @@ public class GameController {
             boolean success = false;
 
             if(dragboard.hasString()) {
-                // Obtener la posición donde se suelta el bloque
+                // Obtenemos la posición donde se suelta el bloque
                 Node targetCell = getNodeByCoordinates(grilla, event.getX(), event.getY());
                 if (targetCell != null) {
                     Integer row = GridPane.getRowIndex(targetCell);
@@ -153,15 +149,15 @@ public class GameController {
                         int originalRow = GridPane.getRowIndex(bloque);
                         int originalCol = GridPane.getColumnIndex(bloque);
 
-                        // Mover el bloque a la nueva celda (en la UI)
+                        // Movemos el bloque a la nueva celda (en la UI)
                         GridPane.setRowIndex(bloque, row);
                         GridPane.setColumnIndex(bloque, column);
 
-                        // E intercambio el rectangle en la celda original (en la UI)
+                        // E intercambiamos el rectangle en la celda original (en la UI)
                         GridPane.setRowIndex(targetCell, originalRow);
                         GridPane.setColumnIndex(targetCell, originalCol);
 
-                        // Mover el bloque a la nueva celda (en el Modelo)
+                        // Movemos el bloque a la nueva celda (en el Modelo)
                         Posicion origen = new Posicion(originalCol, originalRow);
                         Posicion destino = new Posicion(column, row);
                         tablero.moverBloque(origen, destino);
@@ -173,7 +169,14 @@ public class GameController {
             event.setDropCompleted(success);
             event.consume();
             if(success){
-                mostrarLaser(canvas);
+                // Con esto hago que en el lvl4, se vayan borrando los laseres
+                // creados por el Bloque de Vidrio que deben ser eliminados
+                // por si se movio de celda el susodicho bloque
+                if(NIVEL_ACTUAL == 4 && game.getTableroActual().getLasers().size() > 1){
+                    tablero.reiniciarEmisores();
+                }
+
+                mostrarLaser(root);
                 SALIR = tablero.chequearVictoria();
                 if(SALIR){
                     TextArea texto = new TextArea("Felicitaciones!\nNivel completado :D\nVaya al siguiente!");
@@ -185,7 +188,6 @@ public class GameController {
                     hbox.getChildren().add(texto);
                 }
             }
-            return;
         });
     }
 
@@ -199,7 +201,9 @@ public class GameController {
         return null;
     }
 
-    private void mostrarLaser(Group canvas){
+    private void mostrarLaser(Parent root){
+        var canvas = (Group) root.lookup("#canvas");
+        HBox hbox = (HBox) root.lookup("#rootHBox");
         // Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser
         var copiaChildren = new ArrayList<>(canvas.getChildren());
 
@@ -219,6 +223,27 @@ public class GameController {
 
             for(int i = 0; i < laser.getTrayectoria().size()-1; i++){
                 dibujarLaser(canvas, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
+            }
+
+            // Con esto hago que en el lvl4, "se tenga en cuenta" el laser creado por el Bloque de Vidrio
+            if(NIVEL_ACTUAL == 4 && game.getTableroActual().getLasers().size() > 1) {
+                Laser laserReflejado = game.getTableroActual().getLasers().get(1);
+                laserReflejado.reiniciarTrayectoria();
+                game.getTableroActual().moverLaser(laserReflejado);
+
+                for(int i = 0; i < laserReflejado.getTrayectoria().size()-1; i++){
+                    dibujarLaser(canvas, laserReflejado.getTrayectoria().get(i), laserReflejado.getTrayectoria().get(i+1));
+                }
+                SALIR = game.getTableroActual().chequearVictoria();
+                if(SALIR){
+                    TextArea texto = new TextArea("Felicitaciones!\nNivel completado :D\nVaya al siguiente!");
+                    texto.setPrefHeight(60);
+                    texto.setMaxHeight(60);
+                    texto.setPrefWidth(140);
+                    texto.setMaxWidth(140);
+                    texto.setMouseTransparent(true);
+                    hbox.getChildren().add(texto);
+                }
             }
         }
     }

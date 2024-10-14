@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Game {
     private final List<Tablero> niveles;
-    private Tablero tableroActual; //= new Tablero("level1.dat");
+    private Tablero tableroActual;
 
     public Game() {
         niveles = new ArrayList<>();
@@ -35,14 +35,12 @@ public class Game {
         };
     }
 
-    // Obtener un Tablero dado el índice
     public Tablero getNivel(int index) {
         if (index >= 0 && index < niveles.size()) {
             return niveles.get(index);
         }
         return null; // Retorna null si el índice está fuera de rango
     }
-
 
     public String getNivelFXML(int nivel) {
         return switch (nivel) {

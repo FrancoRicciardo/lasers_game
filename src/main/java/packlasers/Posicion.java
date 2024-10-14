@@ -25,7 +25,6 @@ public class Posicion {
         this.y = y;
     }
 
-    // Metodo útil para mover la posición en base a una dirección
     public void move(Direccion direction) {
         switch (direction) {
             case NE:

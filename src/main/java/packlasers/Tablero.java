@@ -90,49 +90,42 @@ public class Tablero {
             for (int col = 0; col < linea.length(); col++) {
                 char caracter = linea.charAt(col);
 
-                Posicion pos00 = new Posicion(2*col, 2*row);
-                this.grilla[2*col][2*row] = crearCelda(caracter, pos00);
-
-                Posicion pos10 = new Posicion((2*col)+1, 2*row);
-                this.grilla[(2*col)+1][2*row] = crearCelda(caracter, pos10);
-
-                Posicion pos01 = new Posicion(2*col, (2*row)+1);
-                this.grilla[2*col][(2*row)+1] = crearCelda(caracter, pos01);
-
-                Posicion pos11 = new Posicion((2*col)+1, (2*row)+1);
-                this.grilla[(2*col)+1][(2*row)+1] = crearCelda(caracter, pos11);
+                this.grilla[2*col][2*row] = crearCelda(caracter);
+                this.grilla[(2*col)+1][2*row] = crearCelda(caracter);
+                this.grilla[2*col][(2*row)+1] = crearCelda(caracter);
+                this.grilla[(2*col)+1][(2*row)+1] = crearCelda(caracter);
             }
         }
     }
 
-    private Celda crearCelda(char caracter, Posicion posicion) {
+    private Celda crearCelda(char caracter) {
         Celda celda;
         switch (caracter) {
             case 'F':
-                celda = new Celda(true, posicion);
+                celda = new Celda(true);
                 celda.ponerBloque(new BloqueOpacoFijo());
                 break;
             case 'B':
-                celda = new Celda(true, posicion);
+                celda = new Celda(true);
                 celda.ponerBloque(new BloqueOpacoMovil());
                 break;
             case 'R':
-                celda = new Celda(true, posicion);
+                celda = new Celda(true);
                 celda.ponerBloque(new BloqueEspejo());
                 break;
             case 'G':
-                celda = new Celda(true, posicion);
+                celda = new Celda(true);
                 celda.ponerBloque(new BloqueDeVidrio());
                 break;
             case 'C':
-                celda = new Celda(true, posicion);
+                celda = new Celda(true);
                 celda.ponerBloque(new BloqueDeCristal());
                 break;
             case '.':
-                celda = new Celda(true, posicion); // Celda vacía con piso
+                celda = new Celda(true); // Celda vacía con piso
                 break;
             default:
-                celda = new Celda(false, posicion); // Celda sin piso
+                celda = new Celda(false); // Celda sin piso
                 break;
         }
         return celda;
@@ -211,13 +204,9 @@ public class Tablero {
         /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
         Posicion nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
         nextPos.move(laser.getDireccion());
-/*
-        // Si la siguiente posicion, esta fuera, no se avanza el laser
-        if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
-*/
+
         // Verifica si la celda siguiente existe
         Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
-        //if (nextCelda == null) laser.fuiAbsorbido();
 
         // Mientras el láser esté activo y haya piso en la siguiente posición
         while (laser.isActive()) {
@@ -233,12 +222,8 @@ public class Tablero {
             nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
             nextPos.move(laser.getDireccion());
 
-            // Si la siguiente posicion, esta fuera, no se avanza el laser
-            //if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
-
             // Verifica si la celda siguiente existe
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
-            //if (nextCelda == null) laser.fuiAbsorbido();
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
@@ -258,12 +243,8 @@ public class Tablero {
             nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
             nextPos.move(laser.getDireccion());
 
-            // Si la siguiente posicion, esta fuera, no se avanza el laser
-            //if(isOutOfBounds(nextPos.getCoordX(), nextPos.getCoordY())) laser.fuiAbsorbido();
-
             // Verifica si la celda siguiente existe
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
-            //if (nextCelda == null) laser.fuiAbsorbido();
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
@@ -290,5 +271,13 @@ public class Tablero {
             // Salir si la celda siguiente es nula (fuera de los límites)
             if (nextCelda == null) laser.fuiAbsorbido();
         }
+    }
+
+    public void reiniciarEmisores(){
+        Posicion startPos = new Posicion (lasers.getFirst().getStartPosition().getCoordX(),
+                lasers.getFirst().getStartPosition().getCoordY());
+        Laser firstLaser = new Laser(startPos, lasers.getFirst().getStartDirection());
+        lasers.clear();
+        addLaser(firstLaser);
     }
 }
