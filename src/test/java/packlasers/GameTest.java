@@ -389,7 +389,7 @@ class GameTest {
         Tablero tablero = game.getNivel(nivel-1);
         game.setTableroActual(tablero);
 
-        // Veamos si tablero actual es igual al nivel 2
+        // Veamos si tablero actual es igual al nivel 3
         assertEquals(game.getTableroActual(), tablero);
 
         // Verificaciones de q los Targets sean bien cargados
@@ -415,16 +415,16 @@ class GameTest {
 
         tablero.moverLaser(laser);
         var list = laser.getTrayectoria();
-        // En este nivel, el laser apenas se mueve yiene un bloque opaco movil
+        // En este nivel, el laser apenas se mueve tiene un bloque opaco movil
         // es decir, su trayectoria deberia tener una sola posicion (la inicial)
         assertEquals(1, list.size());
 
         // EN ESTE PUNTO EL LASER VIAJO HASTA EL FINAL CORRECTAMENTE
         // PROBEMOS MOVIENDO UN BLOQUE Y OBSERVANDO SU TRAYECTORIA DE NUEVO
 
-        // Muevo el bloque opaco movil de la celda (1,0) a (1,2) (de la UI)
-        // Osea de (2,0) (3,0) (2,1) (3,1) a (2,4) (3,4) (2,5) (3,5)
-        Posicion origen = new Posicion(1, 0);
+        // Muevo el bloque opaco movil de la celda (1,1) a (1,2) (de la UI)
+        // Osea de (2,2) (3,2) (2,3) (3,3) a (2,4) (3,4) (2,5) (3,5)
+        Posicion origen = new Posicion(1, 1);
         Posicion destino = new Posicion(1, 2);
         tablero.moverBloque(origen, destino);
 
@@ -434,24 +434,20 @@ class GameTest {
 
         list = laser.getTrayectoria();
         // El laser tiene que haber pasado por la pos (1,0)
-        assertEquals(1, list.get(0).getCoordX());
-        assertEquals(0, list.get(0).getCoordY());
+        assertEquals(1, list.getFirst().getCoordX());
+        assertEquals(0, list.getFirst().getCoordY());
 
-        // El laser tiene que haber pasado por la pos (2,1)
-        assertEquals(2, list.get(1).getCoordX());
-        assertEquals(1, list.get(1).getCoordY());
+        // En este nivel, el laser apenas se mueve tiene un bloque opaco movil
+        // es decir, su trayectoria deberia tener una sola posicion (la inicial)
+        assertEquals(1, list.size());
 
-        // En este caso, el laser apenas se mueve una 2da pos tiene un bloque opaco movil
-        // es decir, su trayectoria deberia tener dos posiciones (la inicial y una mas)
-        assertEquals(2, list.size());
+        // EN ESTE PUNTO EL LASER VIAJO HASTA EL FINAL CORRECTAMENTE
+        // PROBEMOS MOVIENDO UN BLOQUE Y OBSERVANDO SU TRAYECTORIA DE NUEVO
 
-        // EN ESTE PUNTO EL LASER VIAJO HASTA EL FINAL CORRECTAMENTE UNA VEZ MAS
-        // PROBEMOS MOVIENDO OTRO BLOQUE Y OBSERVANDO SU NUEVA TRAYECTORIA
-
-        // Muevo el bloque opaco movil de la celda (1,1) a (2,0) (de la UI)
-        // Osea de (2,2) (3,2) (2,3) (3,3) a (4,0) (5,0) (4,1) (5,1)
-        origen = new Posicion(1, 1);
-        destino = new Posicion(2, 0);
+        // Muevo el bloque espejo de la celda (0,1) a (1,1) (de la UI)
+        // Osea de (0,2) (1,2) (0,3) (1,3) a (2,2) (3,2) (2,3) (3,3)
+        origen = new Posicion(0, 1);
+        destino = new Posicion(1, 1);
         tablero.moverBloque(origen, destino);
 
         // Una vez el bloque fue movido correctamente, reinicio el laser
@@ -463,52 +459,19 @@ class GameTest {
         assertEquals(1, list.getFirst().getCoordX());
         assertEquals(0, list.getFirst().getCoordY());
 
-        // El laser tiene que haber pasado por la pos (2,1)
-        assertEquals(2, list.get(1).getCoordX());
-        assertEquals(1, list.get(1).getCoordY());
+        // En este nivel, el laser apenas se mueve tiene un bloque opaco movil
+        // es decir, su trayectoria deberia tener una sola posicion (la inicial)
+        assertEquals(1, list.size());
 
-        // El laser tiene que haber pasado por la pos (3,2)
-        assertEquals(3, list.get(2).getCoordX());
-        assertEquals(2, list.get(2).getCoordY());
-
-        // En este caso, el laser se mueve 3 posiciones y tiene un bloque opaco movil
-        // es decir, su trayectoria deberia tener 2 posiciones (la inicial y dos mas)
-        assertEquals(3, list.size());
-
-        // EN ESTE PUNTO EL LASER VIAJO HASTA EL FINAL CORRECTAMENTE UNA VEZ MAS
-        // PROBEMOS MOVIENDO OTRO BLOQUE Y OBSERVANDO SU NUEVA TRAYECTORIA
-
-        // Muevo el bloque espejo de la celda (0,1) a (1,1) (de la UI)
-        // Osea de (0,2) (1,2) (0,3) (1,3) a (2,2) (3,2) (2,3) (3,3)
-        origen = new Posicion(0, 1);
-        destino = new Posicion(1, 1);
-        tablero.moverBloque(origen, destino);
-
-        list = laser.getTrayectoria();
-        // El laser tiene que haber pasado por la pos (1,0)
-        assertEquals(1, list.getFirst().getCoordX());
-        assertEquals(0, list.getFirst().getCoordY());
-
-        // El laser tiene que haber pasado por la pos (2,1)
-        assertEquals(2, list.get(1).getCoordX());
-        assertEquals(1, list.get(1).getCoordY());
-
-        // Pero porq movimos un bloque, sabemos que en (1,1) hay un Bloque Espejo:
-        // entonces, mira que en la sig celda esta ese bloque y se refleja
-        // convirtiendo su direccion en NE y su pos en (3,1)
-        assertEquals(3, list.get(2).getCoordX());
-        assertEquals(1, list.get(2).getCoordY());
-        assertEquals(Direccion.NE, laser.getDireccion()); //En este frame la direc es NE
-
-        // En este caso, el laser se mueve 3 posiciones y tiene un bloque opaco movil
-        // es decir, su trayectoria deberia tener 2 posiciones mas (la inicial y dos mas)
-        assertEquals(3, list.size());
-
-        // Muevo el bloque opaco movil de la celda (2,0) a (0,1) (de la UI)
-        // Osea de (4,0) (5,0) (4,1) (5,1) a (0,2) (1,2) (0,3) (1,3)
-        origen = new Posicion(2, 0);
+        // Muevo el bloque opaco movil de la celda (1,0) a (0,1) (de la UI)
+        // Osea de (2,0) (3,0) (2,1) (3,1) a (0,2) (1,2) (0,3) (1,3)
+        origen = new Posicion(1, 0);
         destino = new Posicion(0, 1);
         tablero.moverBloque(origen, destino);
+
+        // Una vez el bloque fue movido correctamente, reinicio el laser
+        laser.reiniciarTrayectoria();
+        tablero.moverLaser(laser);
 
         list = laser.getTrayectoria();
         // El laser tiene que haber pasado por la pos (1,0)
@@ -528,9 +491,11 @@ class GameTest {
 
         // El laser tiene que haber pasado por la pos (4,0)
         assertEquals(4, list.get(3).getCoordX());
-        assertEquals(0, list.get(3).getCoordY());
+        assertEquals(0, list.get(3).getCoordY()); // <= SE LLEGO AL TARGET
 
-        // PERO EL TARGET ESTA EN (5,0), EN EL NIVEL 1 ME SOBRABA UNA POS Y ACA ME FALTA ¿¿??
+        // SI ESTA BIEN TODOO, SE ALCANZARON TODOS LOS TARGETS
+        assertTrue(tablero.chequearVictoria());
+
     }
 
     @Test
@@ -758,7 +723,7 @@ class GameTest {
         // Obtengo sus trayectorias
         var trayectoria2 = laser2.getTrayectoria();
 
-        // COMENCEMOS TESTEANDO LA TRAYECTORIA DEL 1ER LASER PARA IR ORDENADOS:
+        // COMENCEMOS TESTEANDO LA TRAYECTORIA DEL 1ER LASER PARA IR ORDENADOS: TODO
 
         // El laser tiene que haber pasado por la pos (6,7) <= PASO POR TARGET (6,7)
         assertEquals(6, trayectoria2.get(1).getCoordX());
