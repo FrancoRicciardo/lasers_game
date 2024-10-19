@@ -22,10 +22,10 @@ public class GameController {
     private GameView gameView;
     private ToggleGroup toggleGroup;
     private Game game;
-    public static boolean SALIR = false;
+    private boolean SALIR = false;
+    public static int NIVEL_ACTUAL = 1;
     public static int CELL_W = 40;
     public static int CELL_H = 40;
-    public static int NIVEL_ACTUAL = 1;
 
     @FXML
     private ToggleButton buttonLevel1, buttonLevel2,
@@ -203,10 +203,9 @@ public class GameController {
 
     private void mostrarLaser(Parent root){
         var pane = (Pane) root.lookup("#pane");
-        HBox hbox = (HBox) root.lookup("#rootHBox");
-        // Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser
-        var copiaChildren = new ArrayList<>(pane.getChildren());
 
+        /* Recorro la GridPane eliminando solo las instancias de Line para reinicar la trayectoria del laser */
+        var copiaChildren = new ArrayList<>(pane.getChildren());
         for (Node child : copiaChildren) {
             if (child instanceof Line && ((Line) child).getStroke() == RED) {
                 pane.getChildren().remove(child);
@@ -217,7 +216,8 @@ public class GameController {
             target.reiniciarTarget();
         }
 
-        for (Laser laser : game.getTableroActual().getLasers()) {
+        var copiaLasers = new ArrayList<>(game.getTableroActual().getLasers());
+        for (Laser laser : copiaLasers) {
             laser.reiniciarTrayectoria();
             game.getTableroActual().moverLaser(laser);
 
@@ -225,24 +225,14 @@ public class GameController {
                 dibujarLaser(pane, laser.getTrayectoria().get(i), laser.getTrayectoria().get(i+1));
             }
 
-            // Con esto hago que en el lvl4, "se tenga en cuenta" el laser creado por el Bloque de Vidrio
-            if(NIVEL_ACTUAL == 4 && game.getTableroActual().getLasers().size() > 1) {
-                Laser laserReflejado = game.getTableroActual().getLasers().get(1);
-                laserReflejado.reiniciarTrayectoria();
-                game.getTableroActual().moverLaser(laserReflejado);
+            /* Si entro a este if, significa que se creo un nuevo laser (Bloque de Vidrio) */
+            if(game.getTableroActual().getLasers().size() > copiaLasers.size()){
+                Laser laserCreado = game.getTableroActual().getLasers().get(1);
+                laserCreado.reiniciarTrayectoria();
+                game.getTableroActual().moverLaser(laserCreado);
 
-                for(int i = 0; i < laserReflejado.getTrayectoria().size()-1; i++){
-                    dibujarLaser(pane, laserReflejado.getTrayectoria().get(i), laserReflejado.getTrayectoria().get(i+1));
-                }
-                SALIR = game.getTableroActual().chequearVictoria();
-                if(SALIR){
-                    TextArea texto = new TextArea("Felicitaciones!\nNivel completado :D\nVaya al siguiente!");
-                    texto.setPrefHeight(60);
-                    texto.setMaxHeight(60);
-                    texto.setPrefWidth(140);
-                    texto.setMaxWidth(140);
-                    texto.setMouseTransparent(true);
-                    hbox.getChildren().add(texto);
+                for(int i = 0; i < laserCreado.getTrayectoria().size()-1; i++){
+                    dibujarLaser(pane, laserCreado.getTrayectoria().get(i), laserCreado.getTrayectoria().get(i+1));
                 }
             }
         }

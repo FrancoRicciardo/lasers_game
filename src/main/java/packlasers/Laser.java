@@ -141,7 +141,7 @@ public class Laser {
         trayectoria.add(newPos2);
     }
 
-    public void difractarLaser (Tablero tablero){
+    public Laser difractarLaser (){
         // Difracta el láser en dos direcciones:
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
 
@@ -181,15 +181,13 @@ public class Laser {
                 }
                 break;
             default:
-                return;
+                return null;
         }
-        // Crea un nuevo láser reflejado y lo agregamos a la colección de láseres del tablero
-        Laser laserReflejado = new Laser(newPos, direccionReflejada);
-        tablero.addLaser(laserReflejado);
-
-        // 2) Y deja correr normalmente el "laser original"
+        /* 1) Y deja correr normalmente el "laser original" */
         moverPosicion();
 
+        /* 2) Crea un nuevo láser reflejado y lo devolvemos */
+        return new Laser(newPos, direccionReflejada);
     }
 
     public void reiniciarTrayectoria(){

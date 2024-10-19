@@ -1,7 +1,9 @@
 package packlasers;
 
 public interface Bloque {
-    // Metodo que define cómo interactúa el bloque con un láser
+    /**
+     * Metodo que define cómo interactúa el bloque con un láser
+     */
     void interactuarLaser(Laser laser, Tablero tablero);
 
     // Metodo que indica si el bloque es móvil o no
@@ -13,7 +15,7 @@ class BloqueDeCristal implements Bloque {
     public void interactuarLaser(Laser laser, Tablero tablero) {
 
         laser.puedoContinuar();
-        // Refracta el laser, continuando en linea recta por el extremo opuesto
+        /* Refracta el laser, continuando en linea recta por el extremo opuesto */
         laser.refractarLaser();
 
     }
@@ -30,8 +32,10 @@ class BloqueDeVidrio implements Bloque {
 
         laser.puedoContinuar();
 
-        // Difracta el láser en dos direcciones
-        laser.difractarLaser(tablero);
+        /* Difracta el láser en dos direcciones y el "nuevo" laser que fue
+        retornado lo agregamos a la coleccion de laseres del tablero*/
+        Laser newLaser = laser.difractarLaser();
+        tablero.addLaser(newLaser);
     }
 
     @Override

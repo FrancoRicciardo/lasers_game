@@ -34,7 +34,7 @@ public class Tablero {
         return targets;
     }
 
-    // Carga el nivel entero (osea la grilla)
+    /* Carga el nivel entero (osea la grilla) */
     public void loadLevel(String filePath) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
         if (inputStream == null) {
@@ -162,24 +162,24 @@ public class Tablero {
         Celda fromCelda11 = getCelda((2*fromPos.getCoordX())+1, (2*fromPos.getCoordY())+1);
         Celda toCelda11 = getCelda((2*toPos.getCoordX())+1, (2*toPos.getCoordY())+1);
 
-        // Verifica si el bloque se puede mover
+        /* Verifica si el bloque se puede mover */
         if (fromCelda00.tieneBloque() && toCelda00.getPiso() && !toCelda00.tieneBloque()) {
 
             Bloque bloque00 = fromCelda00.getBloque();
-            fromCelda00.quitarBloque(); // Quitar bloque de la celda original en 2x,2y
-            toCelda00.ponerBloque(bloque00); // Poner bloque en la nueva celda
+            fromCelda00.quitarBloque(); /* Quitar bloque de la celda original en 2x,2y */
+            toCelda00.ponerBloque(bloque00); /* Poner bloque en la nueva celda */
 
             Bloque bloque10 = fromCelda10.getBloque();
-            fromCelda10.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y
-            toCelda10.ponerBloque(bloque10); // Poner bloque en la nueva celda
+            fromCelda10.quitarBloque(); /* Quitar bloque de la celda original en 2x+1,2y */
+            toCelda10.ponerBloque(bloque10); /* Poner bloque en la nueva celda */
 
             Bloque bloque01 = fromCelda01.getBloque();
-            fromCelda01.quitarBloque(); // Quitar bloque de la celda original en 2x,2y+1
-            toCelda01.ponerBloque(bloque01); // Poner bloque en la nueva celda
+            fromCelda01.quitarBloque(); /* Quitar bloque de la celda original en 2x,2y+1 */
+            toCelda01.ponerBloque(bloque01); /* Poner bloque en la nueva celda */
 
             Bloque bloque11 = fromCelda11.getBloque();
-            fromCelda11.quitarBloque(); // Quitar bloque de la celda original en 2x+1,2y+1
-            toCelda11.ponerBloque(bloque11); // Poner bloque en la nueva celda
+            fromCelda11.quitarBloque(); /* Quitar bloque de la celda original en 2x+1,2y+1 */
+            toCelda11.ponerBloque(bloque11); /* Poner bloque en la nueva celda */
 
         }
     }
@@ -187,9 +187,9 @@ public class Tablero {
     public boolean chequearVictoria() {
         for (Target target : targets) {
             if (!target.getMeAlcanzaron())
-                return false; // Si algún objetivo no ha sido alcanzado, el nivel no está completo
+                return false; /* Si algún objetivo no ha sido alcanzado, el nivel no está completo */
         }
-        return true; // Si todos los objetivos han sido alcanzados, el nivel está completo
+        return true; /* Si todos los objetivos han sido alcanzados, el nivel está completo */
     }
 
     public void moverLaser(Laser laser) {
@@ -197,15 +197,15 @@ public class Tablero {
         Posicion nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
         nextPos.move(laser.getDireccion());
 
-        // Verifica si la celda siguiente existe
+        /* Verifica si la celda siguiente existe */
         Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
 
-        // Mientras el láser esté activo y haya piso en la siguiente posición
+        /* Mientras el láser esté activo y haya piso en la siguiente posición */
         while (laser.isActive()) {
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
-                    // Interactuar con el bloque si existe bloque
+                    /* Interactuar con el bloque si existe bloque */
                     block.interactuarLaser(laser, this);
                 }
             }
@@ -214,18 +214,18 @@ public class Tablero {
             nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
             nextPos.move(laser.getDireccion());
 
-            // Verifica si la celda siguiente existe
+            /* Verifica si la celda siguiente existe */
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
-                    // Interactuar con el bloque si existe bloque
+                    /* Interactuar con el bloque si existe bloque */
                     block.interactuarLaser(laser, this);
                 }
             }
 
-            // Verificar si el láser ha alcanzado un objetivo
+            /* Verificar si el láser ha alcanzado un objetivo */
             for (Target target : targets) {
                 if (laser.currentPosition().equals(target.getPosicion()))
                     target.fuiAlcanzado();
@@ -235,32 +235,32 @@ public class Tablero {
             nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
             nextPos.move(laser.getDireccion());
 
-            // Verifica si la celda siguiente existe
+            /* Verifica si la celda siguiente existe */
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
-                    // Interactuar con el bloque si existe bloque
+                    /* Interactuar con el bloque si existe bloque */
                     block.interactuarLaser(laser, this);
                 }
             }
 
-            // Actualiza la posición del láser
+            /* Actualiza la posición del láser */
             laser.moverPosicion();
 
-            // Verificar si el láser ha alcanzado un objetivo
+            /* Verificar si el láser ha alcanzado un objetivo */
             for (Target target : targets) {
                 if (laser.currentPosition().equals(target.getPosicion()))
                     target.fuiAlcanzado();
             }
 
-            // Prever la próxima celda (actualizar nextPos para continuar)
+            /* Prever la próxima celda (actualizar nextPos para continuar) */
             nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
             nextPos.move(laser.getDireccion());
             nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
 
-            // Salir si la celda siguiente es nula (fuera de los límites)
+            /* Salir si la celda siguiente es nula (fuera de los límites) */
             if (nextCelda == null) laser.fuiAbsorbido();
         }
     }
