@@ -62,4 +62,6 @@ class LaserTest {
         assertEquals(Direccion.NE, laser.getDireccion());
 
     }
+
+
 }

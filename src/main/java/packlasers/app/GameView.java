@@ -1,11 +1,9 @@
 package packlasers.app;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import packlasers.Game;
 

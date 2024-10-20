@@ -39,7 +39,7 @@ public class Laser {
     }
 
     public Posicion currentPosition(){
-        return this.trayectoria.getLast();
+        return this.trayectoria.get(trayectoria.size() - 1);
     }
 
     public Posicion getStartPosition(){
@@ -50,8 +50,10 @@ public class Laser {
         return startDirec;
     }
 
+    /*
+    Mueve el laser una posicion
+    */
     public void moverPosicion(){
-        // Mueve el laser una posicion
         if(estoyActivo) {
             Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
             newPos.move(direccion);
@@ -59,8 +61,10 @@ public class Laser {
         }
     }
 
+    /*
+      Refracta el laser dependiendo su direccion actual
+    */
     public void reflejarLaser() {
-        // Refracta el laser dependiendo su direccion actual
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion) {
             case NE:
@@ -108,8 +112,10 @@ public class Laser {
         trayectoria.add(newPos);
     }
 
+    /*
+     Refracta el laser dependiendo su direccion actual
+      */
     public void refractarLaser() {
-        /* Refracta el laser dependiendo su direccion actual */
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion){
             case NE, SE:

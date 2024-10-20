@@ -6,7 +6,7 @@ import packlasers.Game;
 
 public class Main extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Game game = new Game();
         GameView gameView = new GameView(stage, game);
 

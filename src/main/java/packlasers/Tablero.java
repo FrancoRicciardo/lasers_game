@@ -44,22 +44,22 @@ public class Tablero {
         List<String> lineas = leerLineasDelArchivo(inputStream);
         int filas = 0;
 
-        // Cuento las filas hasta que se encuentre una línea vacía
+        /* Cuento las filas hasta que se encuentre una línea vacía*/
         while (filas < lineas.size() && !lineas.get(filas).isEmpty()) {
             filas++;
         }
 
-        // Inicializo la grilla con el número de filas y el tamaño de la primera línea
+        /* Inicializo la grilla con el número de filas y el tamaño de la primera línea*/
         this.grilla = new Celda[(lineas.getFirst().length())*2][filas*2];
 
-        // Cargar la primera seccion de bloques y pisos
+        /* Cargar la primera seccion de bloques y pisos */
         cargarBloquesYPisos(lineas.subList(0, filas));
 
-        // Inicializo ambos arrays con nada
+        /* Inicializo ambos arrays con nada*/
         this.targets = new ArrayList<>();
         this.lasers = new ArrayList<>();
 
-        // Cargar la seccion de emisores y objetivos
+        /* Cargar la seccion de emisores y objetivos*/
         if (filas < lineas.size()) {
             cargarEmisoresYObjetivos(lineas.subList(filas + 1, lineas.size()));
         }
@@ -192,13 +192,16 @@ public class Tablero {
         return true; /* Si todos los objetivos han sido alcanzados, el nivel está completo */
     }
 
-    public void moverLaser(Laser laser) {
+    private Celda obtenerCeldaSig(Laser laser){
         /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
         Posicion nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
         nextPos.move(laser.getDireccion());
+        return getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+    }
 
+    public void moverLaser(Laser laser) {
         /* Verifica si la celda siguiente existe */
-        Celda nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+        Celda nextCelda = obtenerCeldaSig(laser);
 
         /* Mientras el láser esté activo y haya piso en la siguiente posición */
         while (laser.isActive()) {
@@ -210,12 +213,8 @@ public class Tablero {
                 }
             }
 
-            /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
-            nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
-            nextPos.move(laser.getDireccion());
-
             /* Verifica si la celda siguiente existe */
-            nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+            nextCelda = obtenerCeldaSig(laser);
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
@@ -231,12 +230,8 @@ public class Tablero {
                     target.fuiAlcanzado();
             }
 
-            /* "Avanzo a mano" a la sig posicion para verificar que haya piso */
-            nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
-            nextPos.move(laser.getDireccion());
-
             /* Verifica si la celda siguiente existe */
-            nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+            nextCelda = obtenerCeldaSig(laser);
 
             if(nextCelda != null){
                 Bloque block = nextCelda.getBloque();
@@ -255,10 +250,7 @@ public class Tablero {
                     target.fuiAlcanzado();
             }
 
-            /* Prever la próxima celda (actualizar nextPos para continuar) */
-            nextPos = new Posicion(laser.currentPosition().getCoordX(), laser.currentPosition().getCoordY());
-            nextPos.move(laser.getDireccion());
-            nextCelda = getCelda(nextPos.getCoordX(), nextPos.getCoordY());
+            nextCelda = obtenerCeldaSig(laser);
 
             /* Salir si la celda siguiente es nula (fuera de los límites) */
             if (nextCelda == null) laser.fuiAbsorbido();
@@ -266,11 +258,7 @@ public class Tablero {
     }
 
     public boolean isOutOfBounds(int x, int y){
-        if (x >= 0 && x < grilla.length && y >= 0 && y < grilla[0].length) {
-            return false;
-        } else {
-            return true;
-        }
+        return x < 0 || x >= grilla.length || y < 0 || y >= grilla[0].length;
     }
 
     public void reiniciarEmisores(){

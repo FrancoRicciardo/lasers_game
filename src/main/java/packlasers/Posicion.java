@@ -25,6 +25,9 @@ public class Posicion {
         this.y = y;
     }
 
+    /**
+     * Mueve la posición en la dirección especificada.
+     */
     public void move(Direccion direction) {
         switch (direction) {
             case NE:
@@ -46,6 +49,9 @@ public class Posicion {
         }
     }
 
+    /*
+     * Compara esta posición con otro objeto para determinar si son iguales.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

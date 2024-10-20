@@ -15,7 +15,6 @@ import static javafx.scene.paint.Color.RED;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import packlasers.*;
-
 import java.util.ArrayList;
 
 public class GameController {
@@ -24,8 +23,8 @@ public class GameController {
     private Game game;
     private boolean SALIR = false;
     public static int NIVEL_ACTUAL = 1;
-    public static int CELL_W = 40;
-    public static int CELL_H = 40;
+    public static final int CELL_W = 40;
+    public static final int CELL_H = 40;
 
     @FXML
     private ToggleButton buttonLevel1, buttonLevel2,
@@ -48,6 +47,10 @@ public class GameController {
         configurarToggleButtons();
     }
 
+    /**
+     * Configura los botones de nivel (ToggleButtons) para que estén agrupados
+     * y se asocien con eventos que cambian el nivel activo.
+     */
     private void configurarToggleButtons() {
         buttonLevel1.setToggleGroup(toggleGroup);
         buttonLevel2.setToggleGroup(toggleGroup);
@@ -56,7 +59,6 @@ public class GameController {
         buttonLevel5.setToggleGroup(toggleGroup);
         buttonLevel6.setToggleGroup(toggleGroup);
 
-        // Configurar los eventos de acción para cada botón
         buttonLevel1.setOnAction(_ -> seleccionarNivel(1));
         buttonLevel2.setOnAction(_ -> seleccionarNivel(2));
         buttonLevel3.setOnAction(_ -> seleccionarNivel(3));
@@ -65,6 +67,9 @@ public class GameController {
         buttonLevel6.setOnAction(_ -> seleccionarNivel(6));
     }
 
+    /**
+     * Selecciona un nivel del juego, reiniciando el estado del nivel y cargando su tablero en la vista.
+     */
     private void seleccionarNivel(int nivel) {
         game.reiniciarNivel(nivel);
         game.setTableroActual(game.getNivel(nivel - 1));
@@ -73,14 +78,19 @@ public class GameController {
         gameView.cargarNivel(nivel);
     }
 
+    /**
+     * Inicializa el juego en la vista, mostrando los láseres y configurando eventos para mover bloques.
+     */
     public void inicializarJuego(Parent root) {
-        System.out.println("Inicializando juego...");
-        System.out.println("Dibujando laseres...");
         mostrarLaser(root);
-        System.out.println("Configurando eventos para bloques...");
         configurarEventosBloques(root);
     }
 
+
+    /**
+     * Configura los eventos de arrastre para los bloques movibles en el tablero.
+     * Detecta cuándo se selecciona un bloque y cuándo se suelta en una nueva posición.
+     */
     private void configurarEventosBloques(Parent root) {
         if(SALIR) return;
         grilla.setOnMousePressed(event -> {
@@ -191,7 +201,9 @@ public class GameController {
         });
     }
 
-    // Este metodo encuentra el nodo en la GridPane basado en las coordenadas del mouse
+    /*
+     Este metodo encuentra el nodo en la GridPane basado en las coordenadas del mouse
+     */
     private Node getNodeByCoordinates(GridPane gridPane, double x, double y) {
         for (Node node : gridPane.getChildren()) {
             if (node.getBoundsInParent().contains(x, y)) {
@@ -201,6 +213,10 @@ public class GameController {
         return null;
     }
 
+    /**
+     * Muestra los láseres en la interfaz gráfica, dibujando las líneas que representan
+     * su trayectoria. También reinicia los emisores en caso de que un bloque sea movido.
+     */
     private void mostrarLaser(Parent root){
         var pane = (Pane) root.lookup("#pane");
 
@@ -249,7 +265,9 @@ public class GameController {
         pane.getChildren().add(laserLine);
     }
 
-    // Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
+    /*
+     Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
+     */
     private Posicion convertirCoordAView(Posicion pos) {
         return new Posicion(pos.getCoordX() * (CELL_W/2), pos.getCoordY() * (CELL_H/2));
     }
