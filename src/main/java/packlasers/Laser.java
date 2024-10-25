@@ -50,7 +50,7 @@ public class Laser {
         return startDirec;
     }
 
-    /*
+    /**
     Mueve el laser una posicion
     */
     public void moverPosicion(){
@@ -61,8 +61,8 @@ public class Laser {
         }
     }
 
-    /*
-      Refracta el laser dependiendo su direccion actual
+    /**
+    Refleja el laser dependiendo su direccion actual
     */
     public void reflejarLaser() {
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
@@ -112,9 +112,9 @@ public class Laser {
         trayectoria.add(newPos);
     }
 
-    /*
-     Refracta el laser dependiendo su direccion actual
-      */
+    /**
+    Refracta el laser dependiendo su direccion actual
+    */
     public void refractarLaser() {
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
         switch (direccion){
@@ -142,16 +142,16 @@ public class Laser {
         trayectoria.add(newPos);
 
         // Y avanzo normalmente una posicion en esa direccion
-        Posicion newPos2 = new Posicion (newPos.getCoordX(), newPos.getCoordY());
-        newPos2.move(direccion);
-        trayectoria.add(newPos2);
+        moverPosicion();
     }
 
+    /**
+    Difracta el láser en dos direcciones:
+    */
     public Laser difractarLaser (){
-        // Difracta el láser en dos direcciones:
         Posicion newPos = new Posicion(currentPosition().getCoordX(), currentPosition().getCoordY());
 
-        // 1) Refleja el láser creando un nuevo rayo reflejado en la dirección correspondiente
+        /* 1) Refleja el láser creando un nuevo rayo reflejado en la dirección correspondiente */
         Direccion direccionReflejada;
         switch (direccion) {
             case NE:
@@ -189,6 +189,7 @@ public class Laser {
             default:
                 return null;
         }
+
         /* 1) Y deja correr normalmente el "laser original" */
         moverPosicion();
 

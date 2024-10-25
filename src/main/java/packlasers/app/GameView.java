@@ -19,7 +19,9 @@ public class GameView {
         this.game = game;
     }
 
-    // Cargar un nivel por índice
+    /**
+     * Cargar un nivel por índice
+     */
     public void cargarNivel(int nivel) {
         String nivelFXML = game.getNivelFXML(nivel);
         if (nivelFXML != null) {
@@ -28,12 +30,12 @@ public class GameView {
                 FXMLLoader loader = new FXMLLoader(location);
                 Parent root = loader.load();
 
-                // Con esto establecemos el controller del nivel
+                /* Con esto establecemos el controller del nivel */
                 GameController controller = loader.getController();
                 controller.setGame(game);
                 controller.setGameView(this); // Establece gameView
 
-                // Con esto Seleccionamos el botón correspondiente al nivel actual
+                /* Con esto seleccionamos el botón correspondiente al nivel actual */
                 ToggleButton selectedButton = controller.getButtonForLevel(nivel);
                 if (selectedButton != null) {
                     controller.getToggleGroup().selectToggle(selectedButton);

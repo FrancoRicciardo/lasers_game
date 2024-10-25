@@ -10,7 +10,7 @@ public class Main extends Application {
         Game game = new Game();
         GameView gameView = new GameView(stage, game);
 
-        // Cargo el FXML del nivel inicial (por defecto, el nivel 1)
+        /* Cargo el FXML del nivel inicial (por defecto, el nivel 1) */
         gameView.cargarNivel(1);
     }
 
@@ -18,4 +18,3 @@ public class Main extends Application {
         launch(args);
     }
 }
-

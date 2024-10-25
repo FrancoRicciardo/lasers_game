@@ -49,7 +49,7 @@ public class Posicion {
         }
     }
 
-    /*
+    /**
      * Compara esta posición con otro objeto para determinar si son iguales.
      */
     @Override

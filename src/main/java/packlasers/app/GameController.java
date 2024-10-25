@@ -86,7 +86,6 @@ public class GameController {
         configurarEventosBloques(root);
     }
 
-
     /**
      * Configura los eventos de arrastre para los bloques movibles en el tablero.
      * Detecta cuándo se selecciona un bloque y cuándo se suelta en una nueva posición.
@@ -106,7 +105,8 @@ public class GameController {
 
                 System.out.println("Bloque seleccionado: (" + column + " " + row + ")");
                 Tablero tablero = game.getTableroActual();
-                // Obtenenemos el bloque en la posición 2x, 2y del Modelo
+
+                /* Obtenenemos el bloque en la posición 2x, 2y del Modelo */
                 Celda selectedBlock = tablero.getCelda(2*column, 2*row);
 
                 if (selectedBlock.getBloque() != null && selectedBlock.getBloque().esMovible()) {
@@ -148,7 +148,7 @@ public class GameController {
             boolean success = false;
 
             if(dragboard.hasString()) {
-                // Obtenemos la posición donde se suelta el bloque
+                /* Obtenemos la posición donde se suelta el bloque */
                 Node targetCell = getNodeByCoordinates(grilla, event.getX(), event.getY());
                 if (targetCell != null) {
                     Integer row = GridPane.getRowIndex(targetCell);
@@ -159,15 +159,15 @@ public class GameController {
                         int originalRow = GridPane.getRowIndex(bloque);
                         int originalCol = GridPane.getColumnIndex(bloque);
 
-                        // Movemos el bloque a la nueva celda (en la UI)
+                        /* Movemos el bloque a la nueva celda (en la UI) */
                         GridPane.setRowIndex(bloque, row);
                         GridPane.setColumnIndex(bloque, column);
 
-                        // E intercambiamos el rectangle en la celda original (en la UI)
+                        /* E intercambiamos el rectangle en la celda original (en la UI) */
                         GridPane.setRowIndex(targetCell, originalRow);
                         GridPane.setColumnIndex(targetCell, originalCol);
 
-                        // Movemos el bloque a la nueva celda (en el Modelo)
+                        /* Movemos el bloque a la nueva celda (en el Modelo) */
                         Posicion origen = new Posicion(originalCol, originalRow);
                         Posicion destino = new Posicion(column, row);
                         tablero.moverBloque(origen, destino);
@@ -179,9 +179,9 @@ public class GameController {
             event.setDropCompleted(success);
             event.consume();
             if(success){
-                // Con esto hago que en el lvl4, se vayan borrando los laseres
-                // creados por el Bloque de Vidrio que deben ser eliminados
-                // por si se movio de celda el susodicho bloque
+                /* Con esto hago que en el lvl4, se vayan borrando los laseres
+                 creados por el Bloque de Vidrio que deben ser eliminados
+                 por si se movio de celda el susodicho bloque */
                 if(NIVEL_ACTUAL == 4 && game.getTableroActual().getLasers().size() > 1){
                     tablero.reiniciarEmisores();
                 }
@@ -201,8 +201,8 @@ public class GameController {
         });
     }
 
-    /*
-     Este metodo encuentra el nodo en la GridPane basado en las coordenadas del mouse
+    /**
+     * Este metodo encuentra el nodo en la GridPane basado en las coordenadas del mouse
      */
     private Node getNodeByCoordinates(GridPane gridPane, double x, double y) {
         for (Node node : gridPane.getChildren()) {
@@ -265,8 +265,8 @@ public class GameController {
         pane.getChildren().add(laserLine);
     }
 
-    /*
-     Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
+    /**
+     * Convierte las coordenadas del Modelo a coordenadas de la Vista (píxeles)
      */
     private Posicion convertirCoordAView(Posicion pos) {
         return new Posicion(pos.getCoordX() * (CELL_W/2), pos.getCoordY() * (CELL_H/2));

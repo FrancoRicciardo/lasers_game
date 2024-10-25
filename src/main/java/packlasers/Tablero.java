@@ -34,7 +34,9 @@ public class Tablero {
         return targets;
     }
 
-    /* Carga el nivel entero (osea la grilla) */
+    /**
+    Carga el nivel entero (osea la grilla)
+    */
     public void loadLevel(String filePath) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(filePath);
         if (inputStream == null) {
@@ -44,22 +46,22 @@ public class Tablero {
         List<String> lineas = leerLineasDelArchivo(inputStream);
         int filas = 0;
 
-        /* Cuento las filas hasta que se encuentre una línea vacía*/
+        /* Cuento las filas hasta que se encuentre una línea vacía */
         while (filas < lineas.size() && !lineas.get(filas).isEmpty()) {
             filas++;
         }
 
-        /* Inicializo la grilla con el número de filas y el tamaño de la primera línea*/
+        /* Inicializo la grilla con el número de filas y el tamaño de la primera línea */
         this.grilla = new Celda[(lineas.getFirst().length())*2][filas*2];
 
         /* Cargar la primera seccion de bloques y pisos */
         cargarBloquesYPisos(lineas.subList(0, filas));
 
-        /* Inicializo ambos arrays con nada*/
+        /* Inicializo ambos arrays con nada */
         this.targets = new ArrayList<>();
         this.lasers = new ArrayList<>();
 
-        /* Cargar la seccion de emisores y objetivos*/
+        /* Cargar la seccion de emisores y objetivos */
         if (filas < lineas.size()) {
             cargarEmisoresYObjetivos(lineas.subList(filas + 1, lineas.size()));
         }
@@ -164,7 +166,6 @@ public class Tablero {
 
         /* Verifica si el bloque se puede mover */
         if (fromCelda00.tieneBloque() && toCelda00.getPiso() && !toCelda00.tieneBloque()) {
-
             Bloque bloque00 = fromCelda00.getBloque();
             fromCelda00.quitarBloque(); /* Quitar bloque de la celda original en 2x,2y */
             toCelda00.ponerBloque(bloque00); /* Poner bloque en la nueva celda */
@@ -180,7 +181,6 @@ public class Tablero {
             Bloque bloque11 = fromCelda11.getBloque();
             fromCelda11.quitarBloque(); /* Quitar bloque de la celda original en 2x+1,2y+1 */
             toCelda11.ponerBloque(bloque11); /* Poner bloque en la nueva celda */
-
         }
     }
 
@@ -190,6 +190,13 @@ public class Tablero {
                 return false; /* Si algún objetivo no ha sido alcanzado, el nivel no está completo */
         }
         return true; /* Si todos los objetivos han sido alcanzados, el nivel está completo */
+    }
+
+    private void chequearTargetAlcanzado (Laser laser){
+        for (Target target : targets) {
+            if (laser.currentPosition().equals(target.getPosicion()))
+                target.fuiAlcanzado();
+        }
     }
 
     private Celda obtenerCeldaSig(Laser laser){
@@ -216,7 +223,7 @@ public class Tablero {
             /* Verifica si la celda siguiente existe */
             nextCelda = obtenerCeldaSig(laser);
 
-            if(nextCelda != null){
+            if(nextCelda != null && laser.isActive()){
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
                     /* Interactuar con el bloque si existe bloque */
@@ -224,16 +231,13 @@ public class Tablero {
                 }
             }
 
-            /* Verificar si el láser ha alcanzado un objetivo */
-            for (Target target : targets) {
-                if (laser.currentPosition().equals(target.getPosicion()))
-                    target.fuiAlcanzado();
-            }
+            /* Verificar si el láser ha alcanzado algun objetivo */
+            chequearTargetAlcanzado(laser);
 
             /* Verifica si la celda siguiente existe */
             nextCelda = obtenerCeldaSig(laser);
 
-            if(nextCelda != null){
+            if(nextCelda != null && laser.isActive()){
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
                     /* Interactuar con el bloque si existe bloque */
@@ -244,11 +248,8 @@ public class Tablero {
             /* Actualiza la posición del láser */
             laser.moverPosicion();
 
-            /* Verificar si el láser ha alcanzado un objetivo */
-            for (Target target : targets) {
-                if (laser.currentPosition().equals(target.getPosicion()))
-                    target.fuiAlcanzado();
-            }
+            /* Verificar si el láser ha alcanzado algun objetivo */
+            chequearTargetAlcanzado(laser);
 
             nextCelda = obtenerCeldaSig(laser);
 

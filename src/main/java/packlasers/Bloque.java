@@ -6,20 +6,18 @@ public interface Bloque {
      */
     void interactuarLaser(Laser laser, Tablero tablero);
 
-    /*
-     Metodo que indica si el bloque es móvil o no
+    /**
+     * Metodo que indica si el bloque es móvil o no
      */
     boolean esMovible();
 }
 
+/**
+ * Refracta el laser, continuando en linea recta por el extremo opuesto
+ */
 class BloqueDeCristal implements Bloque {
-    /*
-    Refracta el laser, continuando en linea recta por el extremo opuesto
-    */
-
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
-
         laser.puedoContinuar();
         laser.refractarLaser();
 
@@ -31,15 +29,13 @@ class BloqueDeCristal implements Bloque {
     }
 }
 
+/**
+ * Difracta el láser en dos direcciones y el "nuevo" laser que fue
+ * retornado lo agregamos a la coleccion de laseres del tablero
+ */
 class BloqueDeVidrio implements Bloque {
-    /*
-    Difracta el láser en dos direcciones y el "nuevo" laser que fue
-    retornado lo agregamos a la coleccion de laseres del tablero
-    */
-
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
-
         laser.puedoContinuar();
         Laser newLaser = laser.difractarLaser();
         tablero.addLaser(newLaser);
@@ -51,11 +47,10 @@ class BloqueDeVidrio implements Bloque {
     }
 }
 
+/**
+ * Absorbe el laser
+ */
 class BloqueOpacoMovil implements Bloque {
-    /*
-    Absorbe el laser
-     */
-
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
         laser.fuiAbsorbido();
@@ -65,17 +60,14 @@ class BloqueOpacoMovil implements Bloque {
     public boolean esMovible() {
         return true;
     }
-
 }
 
+/**
+ * Absorbe el laser. No se puede mover.
+ */
 class BloqueOpacoFijo implements Bloque {
-    /*
-    Absorbe el laser. No se puede mover.
-     */
-
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
-
         laser.moverPosicion();
         laser.fuiAbsorbido();
     }
@@ -86,11 +78,10 @@ class BloqueOpacoFijo implements Bloque {
     }
 }
 
+/**
+ * Refleja los lasers como un espejo.
+ */
 class BloqueEspejo implements Bloque {
-    /*
-    Refleja los lasers como un espejo.
-     */
-
     @Override
     public void interactuarLaser(Laser laser, Tablero tablero) {
 
