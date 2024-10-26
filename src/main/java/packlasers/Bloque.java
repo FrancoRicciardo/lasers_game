@@ -3,8 +3,11 @@ package packlasers;
 public interface Bloque {
     /**
      * Metodo que define cómo interactúa el bloque con un láser
+     * PD: si interactuar con un bloque implica generar un nuevo
+     * laser, lo devolvemos. En caso contrario, retornamos null
+     * y el tablero se encargara de manejar dicha situacion.
      */
-    void interactuarLaser(Laser laser, Tablero tablero);
+    Laser interactuarLaser(Laser laser);
 
     /**
      * Metodo que indica si el bloque es móvil o no
@@ -17,10 +20,10 @@ public interface Bloque {
  */
 class BloqueDeCristal implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser, Tablero tablero) {
+    public Laser interactuarLaser(Laser laser) {
         laser.puedoContinuar();
         laser.refractarLaser();
-
+        return null;
     }
 
     @Override
@@ -35,10 +38,9 @@ class BloqueDeCristal implements Bloque {
  */
 class BloqueDeVidrio implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser, Tablero tablero) {
+    public Laser interactuarLaser(Laser laser) {
         laser.puedoContinuar();
-        Laser newLaser = laser.difractarLaser();
-        tablero.addLaser(newLaser);
+        return laser.difractarLaser();
     }
 
     @Override
@@ -52,8 +54,9 @@ class BloqueDeVidrio implements Bloque {
  */
 class BloqueOpacoMovil implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser, Tablero tablero) {
+    public Laser interactuarLaser(Laser laser) {
         laser.fuiAbsorbido();
+        return null;
     }
 
     @Override
@@ -67,9 +70,10 @@ class BloqueOpacoMovil implements Bloque {
  */
 class BloqueOpacoFijo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser, Tablero tablero) {
+    public Laser interactuarLaser(Laser laser) {
         laser.moverPosicion();
         laser.fuiAbsorbido();
+        return null;
     }
 
     @Override
@@ -83,10 +87,10 @@ class BloqueOpacoFijo implements Bloque {
  */
 class BloqueEspejo implements Bloque {
     @Override
-    public void interactuarLaser(Laser laser, Tablero tablero) {
-
+    public Laser interactuarLaser(Laser laser) {
         laser.puedoContinuar();
         laser.reflejarLaser();
+        return null;
     }
 
     @Override

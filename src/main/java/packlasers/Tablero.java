@@ -143,7 +143,7 @@ public class Tablero {
         }
     }
 
-    public void addLaser(Laser laser) {
+    private void addLaser(Laser laser) {
         this.lasers.add(laser);
     }
 
@@ -216,18 +216,22 @@ public class Tablero {
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
                     /* Interactuar con el bloque si existe bloque */
-                    block.interactuarLaser(laser, this);
+                    Laser newLaser = block.interactuarLaser(laser);
+                    /* Si se interactuo con un bloque de vidrio, se creo un laser nuevo asiq lo agregamos */
+                    if (newLaser != null) this.addLaser(newLaser);
                 }
             }
 
             /* Verifica si la celda siguiente existe */
             nextCelda = obtenerCeldaSig(laser);
 
-            if(nextCelda != null && laser.isActive()){
+            if(nextCelda != null && laser.isActive()) {
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
                     /* Interactuar con el bloque si existe bloque */
-                    block.interactuarLaser(laser, this);
+                    Laser newLaser = block.interactuarLaser(laser);
+                    /* Si se interactuo con un bloque de vidrio, se creo un laser nuevo asiq lo agregamos */
+                    if (newLaser != null) this.addLaser(newLaser);
                 }
             }
 
@@ -237,11 +241,13 @@ public class Tablero {
             /* Verifica si la celda siguiente existe */
             nextCelda = obtenerCeldaSig(laser);
 
-            if(nextCelda != null && laser.isActive()){
+            if(nextCelda != null && laser.isActive()) {
                 Bloque block = nextCelda.getBloque();
                 if (block != null) {
                     /* Interactuar con el bloque si existe bloque */
-                    block.interactuarLaser(laser, this);
+                    Laser newLaser = block.interactuarLaser(laser);
+                    /* Si se interactuo con un bloque de vidrio, se creo un laser nuevo asiq lo agregamos */
+                    if (newLaser != null) this.addLaser(newLaser);
                 }
             }
 
