@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<HBox fx:id="rootHBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="437.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="packlasers.app.GameController">
+   <children>
+      <VBox fx:id="listaBotonesVBox" prefHeight="200.0" prefWidth="100.0">
+          <children>
+              <ToggleButton fx:id="buttonLevel1" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level1" />
+              <ToggleButton fx:id="buttonLevel2" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level2" />
+              <ToggleButton fx:id="buttonLevel3" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level3" />
+              <ToggleButton fx:id="buttonLevel4" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level4" />
+              <ToggleButton fx:id="buttonLevel5" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level5" />
+              <ToggleButton fx:id="buttonLevel6" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="level6" />
+          </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </VBox>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="180.0">
+         <children>
+            <GridPane fx:id="grilla" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="180.0" prefWidth="180.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="40.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d9899" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="40.0" smooth="false" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#52eeee" height="40.0" stroke="BLACK" strokeType="INSIDE" width="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Circle fx:id="circleLaser" fill="RED" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="38.0" left="15.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Circle fx:id="circleTarget36" fill="WHITE" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="15.0" top="38.0" />
+                     </GridPane.margin>
+                  </Circle>
+                  <Circle fx:id="circleTarget78" fill="WHITE" radius="4.0" stroke="RED" strokeWidth="2.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="15.0" top="38.0" />
+                     </GridPane.margin>
+                  </Circle>
+               </children>
+            </GridPane>
+            <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" mouseTransparent="true" prefHeight="160.0" prefWidth="160.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>
