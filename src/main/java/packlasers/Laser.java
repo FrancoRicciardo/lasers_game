@@ -206,4 +206,3 @@ public class Laser {
         this.direccion = startDirec;
     }
 }
-

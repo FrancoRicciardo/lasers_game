@@ -27,5 +27,4 @@ public class Celda {
     public boolean getPiso() {
         return this.tienePiso;
     }
-
 }
