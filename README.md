@@ -4,5 +4,5 @@
 - Franco Ricciardo Calderaro (109907)
 - Delfina Paniccia (111028)
 
-## Diagrama de Clases [UML](doc/diagramaDeClases.pdf)
+## Diagrama de Clases [UML](doc/diagramaClasesUML.pdf)
 ## Diagrama de Secuencia [UML](doc/diagramaDeSecuencia.pdf)
